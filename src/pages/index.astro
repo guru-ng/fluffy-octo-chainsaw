@@ -8,30 +8,72 @@ import PageLayout from "@/layouts/Base.astro";
 import { collectionDateSort } from "@/utils/date";
 
 // Posts
-const MAX_POSTS = 10;
+const MAX_POSTS = 3; // Reduced to show fewer posts on homepage
 const allPosts = await getAllPosts();
 const allPostsByDate = allPosts
 	.sort(collectionDateSort)
 	.slice(0, MAX_POSTS) as CollectionEntry<"post">[];
 
 // Notes
-const MAX_NOTES = 5;
+const MAX_NOTES = 3; // Reduced to show fewer notes on homepage
 const allNotes = await getCollection("note");
 const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 ---
 
 <PageLayout meta={{ title: "Home" }}>
-	<section>
-		<h1 class="title mb-6">Hello World!</h1>
-		<p class="mb-4">
-			hello, this is me Gurung, currently in japan. I work as front end and trying to delv into
-			backend and then hopefully full stack and devops and
-		</p> also looking to work with AI automations too.
+	<section class="mb-12">
+		<div class="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
+			<div>
+				<h1 class="title mb-6">Welcome to My Portfolio</h1>
+				<div class="prose prose-cactus max-w-none">
+					<p class="mb-4 text-lg">
+						Hello! I'm Sanjeev Gurung, a passionate developer based in Osaka, Japan. I specialize in
+						<b><i>Frontend</i></b> Development, aspiring to be a full stack developer and devops engineer.
+						I will also be doing some AI automations using Python and other tools.
+					</p>
+					<div class="mt-8">
+						<h2 class="mb-4 text-xl font-bold">What I Do</h2>
+						<ul class="list-inside list-disc space-y-2">
+							<li>Frontend Development (React, Vue, TypeScript)</li>
+							<li>Backend Development (Node.js, Python)</li>
+							<li>Full Stack Solutions</li>
+							<li>AI Automation & Integration</li>
+						</ul>
+					</div>
+					<div class="mt-8">
+						<h2 class="mb-4 text-xl font-bold">Featured Projects</h2>
+						<div class="grid grid-cols-1 gap-4">
+							<div class="border-accent rounded-lg border p-4">
+								<h3 class="mb-2 text-lg font-semibold">Project Name</h3>
+								<p class="mb-2 text-sm">Brief description of the project and your role in it.</p>
+								<div class="flex gap-2">
+									<span class="bg-accent/10 rounded px-2 py-1 text-sm">React</span>
+									<span class="bg-accent/10 rounded px-2 py-1 text-sm">TypeScript</span>
+								</div>
+							</div>
+							<!-- Add more projects as needed -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="flex justify-center">
+				<div class="border-accent relative h-64 w-64 overflow-hidden rounded-full border-4">
+					<img
+						src="/images/profile.jpg"
+						alt="Sanjeev Gurung"
+						class="h-full w-full object-cover"
+						width="256"
+						height="256"
+					/>
+				</div>
+			</div>
+		</div>
 	</section>
 	<SocialList />
 </PageLayout>
+
 <section class="mt-16">
-	<h2 class="title text-accent mb-6 text-xl"><a href="/posts/">Posts</a></h2>
+	<h2 class="title text-accent mb-6 text-xl"><a href="/posts/">Latest Blog Posts</a></h2>
 	<ul class="space-y-4" role="list">
 		{
 			allPostsByDate.map((p) => (
@@ -42,11 +84,12 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 		}
 	</ul>
 </section>
+
 {
 	latestNotes.length > 0 && (
 		<section class="mt-16">
 			<h2 class="title text-accent mb-6 text-xl">
-				<a href="/notes/">Notes</a>
+				<a href="/notes/">Quick Notes & Updates</a>
 			</h2>
 			<ul class="space-y-4" role="list">
 				{latestNotes.map((note) => (

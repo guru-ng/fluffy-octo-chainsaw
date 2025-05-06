@@ -2,35 +2,117 @@
 import PageLayout from "@/layouts/Base.astro";
 
 const meta = {
-	description: "I'm a starter theme for Astro.build",
-	title: "About",
+	description: "Learn more about my background, skills, and experience as a Frontend Developer",
+	title: "About Me",
 };
 ---
 
 <PageLayout meta={meta}>
-	<h1 class="title mb-6">About</h1>
-	<div class="prose prose-sm prose-cactus max-w-none">
-		<p>
-			Hi, I’m a starter Astro. I’m particularly great for getting you started with your own blogging
-			website.
-		</p>
-		<p>Here are my some of my awesome built in features:</p>
-		<ul class="list-inside list-disc" role="list">
-			<li>I'm ultra fast as I'm a static site</li>
-			<li>I'm fully responsive</li>
-			<li>I come with a light and dark mode</li>
-			<li>I'm easy to customise and add additional content</li>
-			<li>I have Tailwind CSS styling</li>
-			<li>Shiki code syntax highlighting</li>
-			<li>Satori for auto generating OG images for blog posts</li>
-		</ul>
-		<p>
-			Clone or fork my <a
-				class="cactus-link inline-block"
-				href="https://github.com/chrismwilliams/astro-cactus"
-				rel="noreferrer"
-				target="_blank">repo</a
-			> if you like me!
-		</p>
+	<div class="mb-12">
+		<div class="grid grid-cols-1 items-start gap-8 md:grid-cols-3">
+			<div class="md:col-span-2">
+				<h1 class="title mb-6">About Me</h1>
+				<div class="prose prose-sm prose-cactus max-w-none">
+					<section class="mb-8">
+						<h2 class="mb-4 text-xl font-bold">Professional Background</h2>
+						<p>
+							My journey in technology began with a strong foundation in Computer Science and
+							Engineering. I've developed a passion for creating efficient, user-friendly web
+							applications and am constantly expanding my skills in both frontend and backend
+							development.
+						</p>
+						<p class="mt-4">
+							Currently based in Osaka, Japan, I'm focused on frontend development while actively
+							working towards becoming a full-stack developer. My goal is to combine my technical
+							skills with innovative solutions to create impactful digital experiences.
+						</p>
+					</section>
+
+					<section class="mb-8">
+						<h2 class="mb-4 text-xl font-bold">Skills & Expertise</h2>
+						<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+							<div>
+								<h3 class="mb-2 font-semibold">Frontend Development</h3>
+								<ul class="list-inside list-disc">
+									<li>HTML5 / CSS3 / JavaScript</li>
+									<li>React / Vue.js</li>
+									<li>TypeScript</li>
+									<li>Tailwind CSS</li>
+									<li>Responsive Design</li>
+								</ul>
+							</div>
+							<div>
+								<h3 class="mb-2 font-semibold">Backend & Tools</h3>
+								<ul class="list-inside list-disc">
+									<li>Node.js</li>
+									<li>Python</li>
+									<li>Git / GitHub</li>
+									<li>Docker (Learning)</li>
+									<li>CI/CD (Learning)</li>
+								</ul>
+							</div>
+						</div>
+					</section>
+
+					<section class="mb-8">
+						<h2 class="mb-4 text-xl font-bold">Experience</h2>
+						<div class="space-y-4">
+							<div>
+								<h3 class="font-semibold">Frontend Developer</h3>
+								<p class="text-sm text-gray-600">2023 - Present</p>
+								<ul class="mt-2 list-inside list-disc">
+									<li>Developed responsive web applications using React and TypeScript</li>
+									<li>Implemented modern UI/UX designs with Tailwind CSS</li>
+									<li>Collaborated with cross-functional teams on various projects</li>
+								</ul>
+							</div>
+							<!-- Add more experience items as needed -->
+						</div>
+					</section>
+
+					<section class="mb-8">
+						<h2 class="mb-4 text-xl font-bold">Education</h2>
+						<div class="space-y-4">
+							<div>
+								<h3 class="font-semibold">Computer Science and Engineering</h3>
+								<p class="text-sm text-gray-600">University Name - Graduation Year</p>
+								<p>Focused on software development, algorithms, and data structures</p>
+							</div>
+						</div>
+					</section>
+
+					<section>
+						<h2 class="mb-4 text-xl font-bold">Let's Connect</h2>
+						<p>
+							I'm always interested in hearing about new projects and opportunities. Feel free to
+							reach out through my <a href="/contact" class="cactus-link">contact page</a> or connect
+							with me on
+							<a
+								href="https://linkedin.com/in/yourusername"
+								class="cactus-link"
+								target="_blank"
+								rel="noopener noreferrer">LinkedIn</a
+							>.
+						</p>
+					</section>
+				</div>
+			</div>
+			<div class="flex flex-col items-center">
+				<div class="border-accent relative mb-4 h-48 w-48 overflow-hidden rounded-full border-4">
+					<img
+						src="/images/profile.jpg"
+						alt="Sanjeev Gurung"
+						class="h-full w-full object-cover"
+						width="192"
+						height="192"
+					/>
+				</div>
+				<div class="text-center">
+					<h3 class="text-lg font-semibold">Sanjeev Gurung</h3>
+					<p class="text-sm text-gray-600">Frontend Developer</p>
+					<p class="text-sm text-gray-600">Osaka, Japan</p>
+				</div>
+			</div>
+		</div>
 	</div>
 </PageLayout>
