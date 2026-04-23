@@ -73,7 +73,9 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 </PageLayout>
 
 <section class="mt-16">
-	<h2 class="title text-accent mb-6 text-xl"><a href="/posts/">Latest Blog Posts</a></h2>
+	<h2 class="title text-accent mb-6 text-xl">
+		<a href="/fluffy-octo-chainsaw/posts/">Latest Blog Posts</a>
+	</h2>
 	<ul class="space-y-4" role="list">
 		{
 			allPostsByDate.map((p) => (
@@ -89,7 +91,7 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 	latestNotes.length > 0 && (
 		<section class="mt-16">
 			<h2 class="title text-accent mb-6 text-xl">
-				<a href="/notes/">Quick Notes & Updates</a>
+				<a href="/fluffy-octo-chainsaw/notes/">Quick Notes & Updates</a>
 			</h2>
 			<ul class="space-y-4" role="list">
 				{latestNotes.map((note) => (
