@@ -1,24 +1,37 @@
 ---
-import { render } from "astro:content";
-import { getAllPosts } from "@/data/post";
 import PostLayout from "@/layouts/BlogPost.astro";
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import { getMicrocmsPostById, getMicrocmsPostsCount, getMicrocmsPosts } from "@/data/microcms";
 
-// if you're using an adaptor in SSR mode, getStaticPaths wont work -> https://docs.astro.build/en/guides/routing/#modifying-the-slug-example-for-ssr
-export const getStaticPaths = (async () => {
-	const blogEntries = await getAllPosts();
-	return blogEntries.map((post) => ({
-		params: { slug: post.id },
-		props: { post },
-	}));
+export const getStaticPaths = (async ({ paginate }) => {
+	const pageSize = 100;
+	// Fetch enough pages to cover all posts.
+	const totalCount = await getMicrocmsPostsCount();
+	const pageCount = Math.ceil(totalCount / pageSize);
+
+	const paths: {
+		params: { slug: string };
+		props: { post: Awaited<ReturnType<typeof getMicrocmsPostById>> };
+	}[] = [];
+	for (let page = 0; page < pageCount; page++) {
+		const offset = page * pageSize;
+		const items = await getMicrocmsPosts({ limit: pageSize, offset });
+		for (const it of items) {
+			paths.push({ params: { slug: it.id }, props: { post: it as any } });
+		}
+	}
+	return paths;
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+
+// BlogPost layout still expects astro-content render output.
+// For now, we pass microCMS fields and render body as-is.
 ---
 
-<PostLayout post={post}>
-	<Content />
+<PostLayout post={post as any}>
+	<pre
+		class="whitespace-pre-wrap">{typeof post.contents === "string" ? post.contents : JSON.stringify(post.contents, null, 2)}</pre>
 </PostLayout>
