@@ -6,28 +6,24 @@ import { getMicrocmsPosts, getMicrocmsPostsCount } from "@/data/microcms";
 import type { GetStaticPaths, Page } from "astro";
 import { Icon } from "astro-icon/components";
 
-const MAX_POSTS_PER_PAGE = 10;
-
 export const getStaticPaths = (async ({ paginate }) => {
+	const PAGE_SIZE = 10; // same as MAX_POSTS_PER_PAGE — redefined here so it's in scope
 	try {
 		const totalCount = await getMicrocmsPostsCount();
 
 		// For now: fetch enough posts and paginate client-side at build time.
 		// (Replace with true offset pagination later if needed.)
-		const pageSize = Math.max(MAX_POSTS_PER_PAGE, 100);
+		const fetchSize = Math.max(PAGE_SIZE, 100);
 		const all: any[] = [];
-		for (let offset = 0; offset < totalCount; offset += pageSize) {
-			const items = await getMicrocmsPosts({ limit: pageSize, offset });
+		for (let offset = 0; offset < totalCount; offset += fetchSize) {
+			const items = await getMicrocmsPosts({ limit: fetchSize, offset });
 			all.push(...items);
 		}
 
-		return paginate(all, {
-			pageSize: MAX_POSTS_PER_PAGE,
-			props: {},
-		});
+		return paginate(all, { pageSize: PAGE_SIZE, props: {} });
 	} catch (error) {
 		console.warn("[posts/page] Failed to fetch from microCMS, building with empty list:", error);
-		return paginate([], { pageSize: MAX_POSTS_PER_PAGE, props: {} });
+		return paginate([], { pageSize: PAGE_SIZE, props: {} });
 	}
 }) satisfies GetStaticPaths;
 
