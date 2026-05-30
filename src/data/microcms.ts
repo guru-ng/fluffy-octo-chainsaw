@@ -1,17 +1,20 @@
-export type MicrocmsPostListItem = {
+// Raw shape returned by the microCMS REST API
+type MicrocmsRawItem = {
 	id: string;
 	title?: string;
 	description?: string;
 	contents?: unknown;
 	publishedAt?: string;
+	publishDate?: string;
 	updatedAt?: string;
 	published?: boolean;
 	draft?: boolean;
-	ogImage?: string;
+	ogImage?: string | { url?: string };
 	coverImage?: {
 		url?: string;
 		alt?: string;
 	};
+	tags?: string[];
 };
 
 const MICROCMS_SERVICE_DOMAIN = import.meta.env.MICROCMS_SERVICE_DOMAIN as string | undefined;
@@ -23,8 +26,11 @@ function requireEnv() {
 }
 
 function baseUrl() {
-	// ex: https://o5q4jwgvjf.microcms.io/api/v1
-	return `https://${MICROCMS_SERVICE_DOMAIN}/api/v1`;
+	// MICROCMS_SERVICE_DOMAIN may be either "xxxx" or the full "xxxx.microcms.io".
+	const domain = (MICROCMS_SERVICE_DOMAIN as string).includes(".")
+		? (MICROCMS_SERVICE_DOMAIN as string)
+		: `${MICROCMS_SERVICE_DOMAIN}.microcms.io`;
+	return `https://${domain}/api/v1`;
 }
 
 async function microcmsFetch<T>(path: string, init?: RequestInit): Promise<T> {
@@ -57,71 +63,81 @@ type MicrocmsListResponse<T> = {
 	offset: number;
 };
 
-type MicrocmsSingleResponse<T> = T & { id?: string };
-
 const COLLECTION_ENDPOINT = "blog";
 
+/**
+ * Normalized post shape that mirrors an Astro content-collection entry
+ * (`{ id, slug, collection, data: {...} }`) so the rest of the theme's
+ * components can consume microCMS posts without any special-casing.
+ */
 export type MicrocmsPost = {
 	id: string;
-	title: string;
-	description: string;
-	contents: unknown;
-	publishDate: Date;
-	updatedDate?: Date | undefined;
-	ogImage?: string;
-	draft?: boolean;
+	slug: string;
+	collection: "post";
+	data: {
+		title: string;
+		description: string;
+		contents: unknown;
+		publishDate: Date;
+		updatedDate?: Date;
+		ogImage?: string;
+		draft: boolean;
+		coverImage?: { src: string; alt: string };
+		tags: string[];
+	};
 };
 
 function toDate(val?: string): Date {
 	if (!val) return new Date(0);
-	const d = new Date(val);
-	return d;
+	return new Date(val);
 }
 
-export async function getMicrocmsPosts(params: { limit: number; offset: number }) {
-	type Item = MicrocmsPostListItem & { id: string };
-	const res = await microcmsFetch<MicrocmsListResponse<Item>>(
-		`/${COLLECTION_ENDPOINT}?limit=${params.limit}&offset=${params.offset}`,
-	);
+/** Map a raw microCMS API item into the theme's normalized post shape. */
+function mapToPost(raw: MicrocmsRawItem): MicrocmsPost {
+	const id = String(raw.id ?? "");
+	const ogImage = typeof raw.ogImage === "object" ? raw.ogImage?.url : raw.ogImage;
 
-	const items = res.contents;
-	return items.map((it) => {
-		const id = String((it as any).id ?? "");
-		const updatedDate = it.updatedAt ? toDate(it.updatedAt) : undefined;
-		return {
-			id,
-			title: String(it.title ?? ""),
-			description: String(it.description ?? ""),
-			contents: it.contents,
-			publishDate: toDate(it.publishedAt ?? (it as any).publishDate),
-			updatedDate,
-			draft: Boolean(it.draft ?? (it as any).published === false),
-			ogImage: String((it as any).ogImage ?? ""),
-		};
-	});
-}
+	const coverImage =
+		raw.coverImage?.url != null
+			? { src: raw.coverImage.url, alt: raw.coverImage.alt ?? "" }
+			: undefined;
 
-export async function getMicrocmsPostById(id: string): Promise<MicrocmsPost> {
-	type Item = MicrocmsPostListItem & { id: string };
-	const res = await microcmsFetch<MicrocmsSingleResponse<Item>>(`/${COLLECTION_ENDPOINT}/${id}`);
-	const it = res;
 	return {
-		id: String((it as any).id ?? id),
-		title: String(it.title ?? ""),
-		description: String(it.description ?? ""),
-		contents: it.contents,
-		publishDate: toDate(it.publishedAt ?? (it as any).publishDate),
-		updatedDate: it.updatedAt ? toDate(it.updatedAt) : undefined,
-		draft: Boolean(it.draft ?? (it as any).published === false),
-		ogImage: String((it as any).ogImage ?? ""),
+		id,
+		slug: id,
+		collection: "post",
+		data: {
+			title: String(raw.title ?? ""),
+			description: String(raw.description ?? ""),
+			contents: raw.contents,
+			publishDate: toDate(raw.publishedAt ?? raw.publishDate),
+			updatedDate: raw.updatedAt ? toDate(raw.updatedAt) : undefined,
+			ogImage: ogImage || undefined,
+			draft: Boolean(raw.draft ?? raw.published === false),
+			coverImage,
+			tags: Array.isArray(raw.tags) ? raw.tags : [],
+		},
 	};
 }
 
+export async function getMicrocmsPosts(params: {
+	limit: number;
+	offset: number;
+}): Promise<MicrocmsPost[]> {
+	const res = await microcmsFetch<MicrocmsListResponse<MicrocmsRawItem>>(
+		`/${COLLECTION_ENDPOINT}?limit=${params.limit}&offset=${params.offset}`,
+	);
+	return res.contents.map(mapToPost);
+}
+
+export async function getMicrocmsPostById(id: string): Promise<MicrocmsPost> {
+	const res = await microcmsFetch<MicrocmsRawItem>(`/${COLLECTION_ENDPOINT}/${id}`);
+	return mapToPost(res);
+}
+
 export async function getMicrocmsPostsCount(): Promise<number> {
-	type Item = MicrocmsPostListItem & { id: string };
-	const res = await microcmsFetch<{ totalCount: number; contents: Item[] }>(
-		`/${COLLECTION_ENDPOINT}?limit=1&offset=0`
+	const res = await microcmsFetch<{ totalCount: number; contents: MicrocmsRawItem[] }>(
+		`/${COLLECTION_ENDPOINT}?limit=1&offset=0`,
 	);
 	return res.totalCount ?? 0;
 }
-

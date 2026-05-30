@@ -9,7 +9,9 @@ const MAX_POSTS = 3;
 let allPostsByDate: Awaited<ReturnType<typeof getMicrocmsPosts>> = [];
 try {
 	const microPosts = await getMicrocmsPosts({ limit: MAX_POSTS, offset: 0 });
-	allPostsByDate = microPosts.sort((a, b) => b.publishDate.getTime() - a.publishDate.getTime());
+	allPostsByDate = microPosts.sort(
+		(a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
+	);
 } catch (error) {
 	console.warn("[index] Failed to fetch from microCMS, showing no posts:", error);
 }

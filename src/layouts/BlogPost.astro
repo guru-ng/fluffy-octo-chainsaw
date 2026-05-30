@@ -10,10 +10,10 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const postData = post?.data ?? post;
+const postData = post?.data ?? post ?? {};
 
 const { ogImage, title, description, updatedDate, publishDate } = postData;
-const socialImage = ogImage ?? `/og-image/${post.id}.png`;
+const socialImage = ogImage ?? `${import.meta.env.BASE_URL}og-image/${post?.id}.png`;
 const articleDate =
 	updatedDate?.toISOString?.() ?? publishDate?.toISOString?.() ?? new Date().toISOString();
 
@@ -33,7 +33,7 @@ const readingTime = "";
 >
 	<article class="grow break-words" data-pagefind-body>
 		<div id="blog-hero" class="mb-12">
-			<Masthead content={{ data: postData } as any} readingTime={readingTime} />
+			<Masthead content={post as any} readingTime={readingTime} />
 		</div>
 		<div class="flex flex-col gap-10 lg:flex-row lg:items-start">
 			{!!headings.length && <TOC headings={headings} />}

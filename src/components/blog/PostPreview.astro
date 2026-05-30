@@ -5,25 +5,28 @@ import type { HTMLTag, Polymorphic } from "astro/types";
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
 	post: {
 		id: string;
-		title?: string;
-		description?: string;
-		publishDate?: Date;
-		draft?: boolean;
+		data: {
+			title?: string;
+			description?: string;
+			publishDate?: Date;
+			draft?: boolean;
+		};
 	};
 	withDesc?: boolean;
 };
 
 const { as: Tag = "div", post, withDesc = false } = Astro.props;
+const { title, description, publishDate, draft } = post.data;
 ---
 
 <FormattedDate
 	class="min-w-30 font-semibold text-gray-600 dark:text-gray-400"
-	date={post.publishDate}
+	date={publishDate}
 />
 <Tag>
-	{post.draft && <span class="text-red-500">(Draft) </span>}
+	{draft && <span class="text-red-500">(Draft) </span>}
 	<a class="cactus-link" data-astro-prefetch href={`${import.meta.env.BASE_URL}posts/${post.id}/`}>
-		{post.title}
+		{title}
 	</a>
 </Tag>
-{withDesc && <q class="line-clamp-3 italic">{post.description}</q>}
+{withDesc && <q class="line-clamp-3 italic">{description}</q>}

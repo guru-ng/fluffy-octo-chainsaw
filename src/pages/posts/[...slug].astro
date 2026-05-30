@@ -31,10 +31,17 @@ export const getStaticPaths = (async () => {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { post } = Astro.props;
+const contents = post?.data?.contents;
+const contentsHtml = typeof contents === "string" ? contents : null;
 ---
 
 <PostLayout post={post as any}>
-	{/* TODO: microCMS contents rendering + TOC generation */}
-	<pre
-		class="whitespace-pre-wrap">{typeof (post as any).contents === "string" ? (post as any).contents : JSON.stringify((post as any).contents, null, 2)}</pre>
+	{/* TODO: richer microCMS contents rendering + TOC generation */}
+	{
+		contentsHtml !== null ? (
+			<Fragment set:html={contentsHtml} />
+		) : (
+			<pre class="whitespace-pre-wrap">{JSON.stringify(contents, null, 2)}</pre>
+		)
+	}
 </PostLayout>
