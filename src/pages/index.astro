@@ -6,8 +6,13 @@ import { getMicrocmsPosts } from "@/data/microcms";
 
 const MAX_POSTS = 3;
 
-const microPosts = await getMicrocmsPosts({ limit: MAX_POSTS, offset: 0 });
-const allPostsByDate = microPosts.sort((a, b) => b.publishDate.getTime() - a.publishDate.getTime());
+let allPostsByDate: Awaited<ReturnType<typeof getMicrocmsPosts>> = [];
+try {
+	const microPosts = await getMicrocmsPosts({ limit: MAX_POSTS, offset: 0 });
+	allPostsByDate = microPosts.sort((a, b) => b.publishDate.getTime() - a.publishDate.getTime());
+} catch (error) {
+	console.warn("[index] Failed to fetch from microCMS, showing no posts:", error);
+}
 ---
 
 <PageLayout meta={{ title: "Home" }}>

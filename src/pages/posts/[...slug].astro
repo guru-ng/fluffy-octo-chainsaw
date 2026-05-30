@@ -4,23 +4,28 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { getMicrocmsPostById, getMicrocmsPostsCount, getMicrocmsPosts } from "@/data/microcms";
 
 export const getStaticPaths = (async () => {
-	const pageSize = 100;
-	// Fetch enough pages to cover all posts.
-	const totalCount = await getMicrocmsPostsCount();
-	const pageCount = Math.ceil(totalCount / pageSize);
+	try {
+		const pageSize = 100;
+		// Fetch enough pages to cover all posts.
+		const totalCount = await getMicrocmsPostsCount();
+		const pageCount = Math.ceil(totalCount / pageSize);
 
-	const paths: {
-		params: { slug: string };
-		props: { post: Awaited<ReturnType<typeof getMicrocmsPostById>> };
-	}[] = [];
-	for (let page = 0; page < pageCount; page++) {
-		const offset = page * pageSize;
-		const items = await getMicrocmsPosts({ limit: pageSize, offset });
-		for (const it of items) {
-			paths.push({ params: { slug: it.id }, props: { post: it as any } });
+		const paths: {
+			params: { slug: string };
+			props: { post: Awaited<ReturnType<typeof getMicrocmsPostById>> };
+		}[] = [];
+		for (let page = 0; page < pageCount; page++) {
+			const offset = page * pageSize;
+			const items = await getMicrocmsPosts({ limit: pageSize, offset });
+			for (const it of items) {
+				paths.push({ params: { slug: it.id }, props: { post: it as any } });
+			}
 		}
+		return paths;
+	} catch (error) {
+		console.warn("[posts/slug] Failed to fetch from microCMS, building with no post pages:", error);
+		return [];
 	}
-	return paths;
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
