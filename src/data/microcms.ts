@@ -79,10 +79,10 @@ export type MicrocmsPost = {
 		description: string;
 		contents: unknown;
 		publishDate: Date;
-		updatedDate?: Date;
-		ogImage?: string;
+		updatedDate?: Date | undefined;
+		ogImage?: string | undefined;
 		draft: boolean;
-		coverImage?: { src: string; alt: string };
+		coverImage?: { src: string; alt: string } | undefined;
 		tags: string[];
 	};
 };
