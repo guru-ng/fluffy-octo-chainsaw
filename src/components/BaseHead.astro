@@ -11,7 +11,10 @@ const { articleDate, description, ogImage, title } = Astro.props;
 const titleSeparator = "•";
 const siteTitle = `${title} ${titleSeparator} ${siteConfig.title}`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const socialImageURL = new URL(ogImage ? ogImage : "/social-card.png", Astro.url).href;
+const base = import.meta.env.BASE_URL; // e.g. "/fluffy-octo-chainsaw/"
+// Build a base-aware asset URL from a root-relative path like "/icon.svg"
+const asset = (path: string) => `${base.replace(/\/$/, "")}${path}`;
+const socialImageURL = new URL(ogImage ? ogImage : asset("/social-card.png"), Astro.url).href;
 ---
 
 <meta charset="utf-8" />
@@ -19,15 +22,15 @@ const socialImageURL = new URL(ogImage ? ogImage : "/social-card.png", Astro.url
 <title>{siteTitle}</title>
 
 {/* Icons */}
-<link href="/icon.svg" rel="icon" type="image/svg+xml" />
+<link href={asset("/icon.svg")} rel="icon" type="image/svg+xml" />
 {
 	import.meta.env.PROD && (
 		<>
 			{/* Favicon & Apple Icon */}
-			<link rel="icon" href="/favicon-32x32.png" type="image/png" />
-			<link href="/icons/apple-touch-icon.png" rel="apple-touch-icon" />
+			<link rel="icon" href={asset("/favicon-32x32.png")} type="image/png" />
+			<link href={asset("/icons/apple-touch-icon.png")} rel="apple-touch-icon" />
 			{/* Manifest */}
-			<link href="/manifest.webmanifest" rel="manifest" />
+			<link href={asset("/manifest.webmanifest")} rel="manifest" />
 		</>
 	)
 }
@@ -67,11 +70,11 @@ const socialImageURL = new URL(ogImage ? ogImage : "/social-card.png", Astro.url
 <meta content={socialImageURL} property="twitter:image" />
 
 {/* Sitemap */}
-<link href="/sitemap-index.xml" rel="sitemap" />
+<link href={asset("/sitemap-index.xml")} rel="sitemap" />
 
 {/* RSS auto-discovery */}
-<link href="/rss.xml" title="Blog" rel="alternate" type="application/rss+xml" />
-<link href="/notes/rss.xml" title="Notes" rel="alternate" type="application/rss+xml" />
+<link href={asset("/rss.xml")} title="Blog" rel="alternate" type="application/rss+xml" />
+<link href={asset("/notes/rss.xml")} title="Notes" rel="alternate" type="application/rss+xml" />
 
 {/* Webmentions */}
 {
