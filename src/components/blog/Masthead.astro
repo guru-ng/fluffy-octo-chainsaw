@@ -8,10 +8,9 @@ interface Props {
 	readingTime: string;
 }
 
-const {
-	content: { data },
-	readingTime,
-} = Astro.props;
+const { content, readingTime } = Astro.props;
+// Support both Astro CollectionEntry shape ({ data: {...} }) and plain objects (microCMS)
+const data = (content?.data ?? content) ?? {};
 
 const dateTimeOptions: Intl.DateTimeFormatOptions = {
 	month: "long",
