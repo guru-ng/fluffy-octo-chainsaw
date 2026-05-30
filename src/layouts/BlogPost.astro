@@ -33,7 +33,7 @@ const readingTime = "";
 >
 	<article class="grow break-words" data-pagefind-body>
 		<div id="blog-hero" class="mb-12">
-			<Masthead content={post as any} readingTime={readingTime} />
+			<Masthead content={{ data: postData } as any} readingTime={readingTime} />
 		</div>
 		<div class="flex flex-col gap-10 lg:flex-row lg:items-start">
 			{!!headings.length && <TOC headings={headings} />}
