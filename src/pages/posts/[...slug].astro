@@ -3,7 +3,7 @@ import PostLayout from "@/layouts/BlogPost.astro";
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { getMicrocmsPostById, getMicrocmsPostsCount, getMicrocmsPosts } from "@/data/microcms";
 
-export const getStaticPaths = (async ({ paginate }) => {
+export const getStaticPaths = (async () => {
 	const pageSize = 100;
 	// Fetch enough pages to cover all posts.
 	const totalCount = await getMicrocmsPostsCount();
@@ -26,12 +26,10 @@ export const getStaticPaths = (async ({ paginate }) => {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { post } = Astro.props;
-
-// BlogPost layout still expects astro-content render output.
-// For now, we pass microCMS fields and render body as-is.
 ---
 
 <PostLayout post={post as any}>
+	{/* TODO: microCMS contents rendering + TOC generation */}
 	<pre
-		class="whitespace-pre-wrap">{typeof post.contents === "string" ? post.contents : JSON.stringify(post.contents, null, 2)}</pre>
+		class="whitespace-pre-wrap">{typeof (post as any).contents === "string" ? (post as any).contents : JSON.stringify((post as any).contents, null, 2)}</pre>
 </PostLayout>

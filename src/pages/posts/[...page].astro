@@ -11,8 +11,8 @@ const MAX_POSTS_PER_PAGE = 10;
 export const getStaticPaths = (async ({ paginate }) => {
 	const totalCount = await getMicrocmsPostsCount();
 
-	// Create an array of posts for pagination. (We keep it simple for now.)
-	// If you have many posts, switch this to a real “offset/limit” pagination strategy.
+	// For now: fetch enough posts and paginate client-side at build time.
+	// (Replace with true offset pagination later if needed.)
 	const pageSize = Math.max(MAX_POSTS_PER_PAGE, 100);
 	const all: any[] = [];
 	for (let offset = 0; offset < totalCount; offset += pageSize) {
@@ -51,14 +51,6 @@ const paginationProps = {
 		},
 	}),
 };
-
-const groupedByYear = page.data.reduce<Record<string, any[]>>((acc, p) => {
-	const year = new Date(p.publishDate).getFullYear();
-	(acc[year] ??= []).push(p);
-	return acc;
-}, {});
-
-const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 ---
 
 <PageLayout meta={meta}>
@@ -70,26 +62,15 @@ const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 		</a>
 	</div>
 
-	<div class="grid sm:grid-cols-[3fr_1fr] sm:gap-x-8 sm:gap-y-16">
-		<div>
-			{
-				descYearKeys.map((yearKey) => (
-					<section aria-labelledby={`year-${yearKey}`}>
-						<h2 id={`year-${yearKey}`} class="title text-lg">
-							<span class="sr-only">Posts in</span>
-							{yearKey}
-						</h2>
-						<ul class="mt-5 mb-16 space-y-4 text-start">
-							{groupedByYear[yearKey]?.map((p) => (
-								<li class="grid gap-2 sm:grid-cols-[auto_1fr] sm:[&_q]:col-start-2">
-									<PostPreview post={p} />
-								</li>
-							))}
-						</ul>
-					</section>
-				))
-			}
-			<Pagination {...paginationProps} />
-		</div>
-	</div>
+	<ul class="space-y-4">
+		{
+			page.data.map((p: any) => (
+				<li class="grid gap-2 sm:grid-cols-[auto_1fr] sm:[&_q]:col-start-2">
+					<PostPreview post={p} withDesc />
+				</li>
+			))
+		}
+	</ul>
+
+	<Pagination {...paginationProps} />
 </PageLayout>
