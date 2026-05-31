@@ -89,7 +89,23 @@ export type MicrocmsPost = {
 
 function toDate(val?: string): Date {
 	if (!val) return new Date(0);
-	return new Date(val);
+
+	// Handle Japanese-formatted dates like "2026年05月30日 17:00" (optional seconds),
+	// which native Date cannot parse. Treat as JST (+09:00).
+	const jp = val.match(
+		/(\d{4})年(\d{1,2})月(\d{1,2})日\s*(?:(\d{1,2}):(\d{2})(?::(\d{2}))?)?/,
+	);
+	if (jp) {
+		const [, y, mo, d, h = "0", mi = "0", s = "0"] = jp;
+		const pad = (n: string | number | undefined, len = 2) =>
+			String(n ?? "0").padStart(len, "0");
+		const iso = `${y}-${pad(mo)}-${pad(d)}T${pad(h)}:${pad(mi)}:${pad(s)}+09:00`;
+		const parsed = new Date(iso);
+		if (!Number.isNaN(parsed.getTime())) return parsed;
+	}
+
+	const d = new Date(val);
+	return Number.isNaN(d.getTime()) ? new Date(0) : d;
 }
 
 /** Map a raw microCMS API item into the theme's normalized post shape. */
