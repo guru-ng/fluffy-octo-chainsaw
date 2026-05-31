@@ -1,20 +1,9 @@
-// Raw shape returned by the microCMS REST API
-type MicrocmsRawItem = {
+// Raw item returned by the microCMS REST API. Field names vary per service,
+// so we keep this loose and resolve known/alternate keys in mapToPost().
+type MicrocmsRawItem = Record<string, unknown> & {
 	id: string;
-	title?: string;
-	description?: string;
-	contents?: unknown;
 	publishedAt?: string;
-	publishDate?: string;
 	updatedAt?: string;
-	published?: boolean;
-	draft?: boolean;
-	ogImage?: string | { url?: string };
-	coverImage?: {
-		url?: string;
-		alt?: string;
-	};
-	tags?: string[];
 };
 
 const MICROCMS_SERVICE_DOMAIN = import.meta.env.MICROCMS_SERVICE_DOMAIN as string | undefined;
@@ -108,30 +97,68 @@ function toDate(val?: string): Date {
 	return Number.isNaN(d.getTime()) ? new Date(0) : d;
 }
 
+/** Case-insensitively pick the first matching key's value from a raw item. */
+function pick(raw: MicrocmsRawItem, names: string[]): unknown {
+	const keys = Object.keys(raw);
+	for (const name of names) {
+		const match = keys.find((k) => k.toLowerCase() === name.toLowerCase());
+		if (match != null && raw[match] != null && raw[match] !== "") return raw[match];
+	}
+	return undefined;
+}
+
+/** Strip HTML tags and collapse whitespace for plain-text excerpts. */
+function toPlainText(val: unknown): string {
+	if (typeof val !== "string") return "";
+	return val
+		.replace(/<[^>]*>/g, " ")
+		.replace(/\s+/g, " ")
+		.trim();
+}
+
 /** Map a raw microCMS API item into the theme's normalized post shape. */
 function mapToPost(raw: MicrocmsRawItem): MicrocmsPost {
 	const id = String(raw.id ?? "");
-	const ogImage = typeof raw.ogImage === "object" ? raw.ogImage?.url : raw.ogImage;
 
+	// Field names differ per microCMS service, so accept common alternates.
+	const contents = pick(raw, ["contents", "content", "body", "richEditor"]);
+	const rawTitle = pick(raw, ["title", "name", "heading", "subject"]);
+	const rawDescription = pick(raw, ["description", "summary", "excerpt", "lead"]);
+	const dateVal = pick(raw, ["date", "publishDate", "publishedAt"]) ?? raw.publishedAt;
+
+	const plain = toPlainText(contents);
+	// Fall back to a content excerpt when there's no dedicated title/description.
+	const title = String(rawTitle ?? "") || (plain ? `${plain.slice(0, 60)}` : "(Untitled)");
+	const description = String(rawDescription ?? "") || plain.slice(0, 160);
+
+	const ogImageRaw = pick(raw, ["ogImage", "ogimage"]);
+	const ogImage =
+		ogImageRaw && typeof ogImageRaw === "object"
+			? (ogImageRaw as { url?: string }).url
+			: (ogImageRaw as string | undefined);
+
+	const coverRaw = pick(raw, ["coverImage", "cover", "eyecatch", "thumbnail", "image"]) as
+		| { url?: string; alt?: string }
+		| undefined;
 	const coverImage =
-		raw.coverImage?.url != null
-			? { src: raw.coverImage.url, alt: raw.coverImage.alt ?? "" }
-			: undefined;
+		coverRaw?.url != null ? { src: coverRaw.url, alt: coverRaw.alt ?? "" } : undefined;
+
+	const tagsRaw = pick(raw, ["tags", "categories"]);
 
 	return {
 		id,
 		slug: id,
 		collection: "post",
 		data: {
-			title: String(raw.title ?? ""),
-			description: String(raw.description ?? ""),
-			contents: raw.contents,
-			publishDate: toDate(raw.publishedAt ?? raw.publishDate),
+			title,
+			description,
+			contents,
+			publishDate: toDate(typeof dateVal === "string" ? dateVal : undefined),
 			updatedDate: raw.updatedAt ? toDate(raw.updatedAt) : undefined,
 			ogImage: ogImage || undefined,
-			draft: Boolean(raw.draft ?? raw.published === false),
+			draft: Boolean(pick(raw, ["draft"]) ?? raw.published === false),
 			coverImage,
-			tags: Array.isArray(raw.tags) ? raw.tags : [],
+			tags: Array.isArray(tagsRaw) ? (tagsRaw as string[]) : [],
 		},
 	};
 }
