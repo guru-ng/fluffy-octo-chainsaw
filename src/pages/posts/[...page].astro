@@ -11,14 +11,17 @@ export const getStaticPaths = (async ({ paginate }) => {
 	try {
 		const totalCount = await getMicrocmsPostsCount();
 
-		// For now: fetch enough posts and paginate client-side at build time.
-		// (Replace with true offset pagination later if needed.)
-		const fetchSize = Math.max(PAGE_SIZE, 100);
+		// microCMS caps `limit` at 100 per request, so page through all posts in
+		// batches of 100 and collect them, then paginate into PAGE_SIZE chunks.
+		const fetchSize = 100;
 		const all: any[] = [];
 		for (let offset = 0; offset < totalCount; offset += fetchSize) {
 			const items = await getMicrocmsPosts({ limit: fetchSize, offset });
 			all.push(...items);
 		}
+
+		// Newest first so pagination order is stable as the blog grows.
+		all.sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
 
 		return paginate(all, { pageSize: PAGE_SIZE, props: {} });
 	} catch (error) {

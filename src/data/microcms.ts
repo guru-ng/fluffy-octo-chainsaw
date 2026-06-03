@@ -166,9 +166,13 @@ function mapToPost(raw: MicrocmsRawItem): MicrocmsPost {
 export async function getMicrocmsPosts(params: {
 	limit: number;
 	offset: number;
+	/** microCMS `orders` value, e.g. "-publishedAt" (default) for newest first. */
+	orders?: string;
 }): Promise<MicrocmsPost[]> {
+	const orders = params.orders ?? "-publishedAt";
+	const query = `limit=${params.limit}&offset=${params.offset}&orders=${encodeURIComponent(orders)}`;
 	const res = await microcmsFetch<MicrocmsListResponse<MicrocmsRawItem>>(
-		`/${COLLECTION_ENDPOINT}?limit=${params.limit}&offset=${params.offset}`,
+		`/${COLLECTION_ENDPOINT}?${query}`,
 	);
 	return res.contents.map(mapToPost);
 }
