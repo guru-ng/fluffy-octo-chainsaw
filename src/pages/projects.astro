@@ -1,0 +1,91 @@
+---
+import PageLayout from "@/layouts/Base.astro";
+
+const meta = {
+	description: "A selection of projects I've built — side projects, experiments, and work I'm proud of.",
+	title: "Projects",
+};
+
+interface Project {
+	title: string;
+	description: string;
+	tech: string[];
+	github?: string;
+	demo?: string;
+}
+
+// TODO: Replace these placeholder projects with your real work.
+const projects: Project[] = [
+	{
+		title: "Project Alpha",
+		description:
+			"A brief description of what this project does and the problem it solves. What was interesting or challenging about building it?",
+		tech: ["React", "TypeScript", "Tailwind CSS"],
+		github: "https://github.com/guru-ng/project-alpha",
+		demo: "https://example.com",
+	},
+	{
+		title: "Project Beta",
+		description:
+			"Another project description. Mention the key features, your role, and any notable technical decisions you made.",
+		tech: ["Node.js", "PostgreSQL", "Docker"],
+		github: "https://github.com/guru-ng/project-beta",
+	},
+	{
+		title: "Project Gamma",
+		description:
+			"A third project. This could be a CLI tool, a library, an automation script — anything worth sharing.",
+		tech: ["Python", "FastAPI"],
+		demo: "https://example.com",
+	},
+];
+---
+
+<PageLayout meta={meta}>
+	<div class="mb-12">
+		<h1 class="title mb-2">Projects</h1>
+		<p class="text-gray-600 dark:text-gray-400 mb-10">
+			Things I've built, am building, or find interesting enough to share.
+		</p>
+
+		<ul class="grid grid-cols-1 gap-6 sm:grid-cols-2" role="list">
+			{
+				projects.map((project) => (
+					<li class="border-accent flex flex-col gap-3 rounded-lg border p-5">
+						<h2 class="text-base font-semibold text-accent-2">{project.title}</h2>
+						<p class="flex-1 text-sm leading-relaxed">{project.description}</p>
+
+						<div class="flex flex-wrap gap-2">
+							{project.tech.map((tag) => (
+								<span class="bg-accent/10 rounded px-2 py-0.5 text-xs">{tag}</span>
+							))}
+						</div>
+
+						<div class="flex gap-4 text-sm">
+							{project.github && (
+								<a
+									class="cactus-link"
+									href={project.github}
+									target="_blank"
+									rel="noreferrer noopener"
+								>
+									GitHub ↗
+								</a>
+							)}
+							{project.demo && (
+								<a
+									class="cactus-link"
+									href={project.demo}
+									target="_blank"
+									rel="noreferrer noopener"
+								>
+									Live demo ↗
+								</a>
+							)}
+						</div>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</PageLayout>

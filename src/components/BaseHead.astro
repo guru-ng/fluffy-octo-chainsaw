@@ -87,3 +87,40 @@ const socialImageURL = new URL(ogImage ? ogImage : asset("/social-card.png"), As
 }
 
 <meta content={Astro.generator} name="generator" />
+
+{/* JSON-LD Structured Data */}
+<Fragment
+	set:html={`<script type="application/ld+json">${JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "WebSite",
+		name: siteConfig.title,
+		url: siteConfig.url,
+		description: siteConfig.description,
+	})}</script>`}
+/>
+{
+	articleDate ? (
+		<Fragment
+			set:html={`<script type="application/ld+json">${JSON.stringify({
+				"@context": "https://schema.org",
+				"@type": "BlogPosting",
+				headline: title,
+				description: description,
+				datePublished: articleDate,
+				author: { "@type": "Person", name: siteConfig.author },
+				url: canonicalURL.toString(),
+			})}</script>`}
+		/>
+	) : (
+		<Fragment
+			set:html={`<script type="application/ld+json">${JSON.stringify({
+				"@context": "https://schema.org",
+				"@type": "Person",
+				name: siteConfig.author,
+				url: siteConfig.url,
+				jobTitle: "Frontend Developer",
+				sameAs: ["https://github.com/guru-ng"],
+			})}</script>`}
+		/>
+	)
+}

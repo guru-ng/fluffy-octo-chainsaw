@@ -1,0 +1,110 @@
+---
+import PageLayout from "@/layouts/Base.astro";
+
+const meta = {
+	description: "Get in touch — I'm always happy to hear about new projects and opportunities.",
+	title: "Contact",
+};
+
+/**
+ * Formspree setup (free tier, works on GitHub Pages):
+ * 1. Create a free account at https://formspree.io
+ * 2. Create a new form and copy the form ID (looks like "xyzabcde")
+ * 3. Replace TODO_REPLACE_FORM_ID below with that ID.
+ */
+// TODO: Replace with your Formspree form ID
+const FORMSPREE_ID = "TODO_REPLACE_FORM_ID";
+const FORMSPREE_ACTION = `https://formspree.io/f/${FORMSPREE_ID}`;
+---
+
+<PageLayout meta={meta}>
+	<div class="mb-12">
+		<h1 class="title mb-2">Contact</h1>
+		<p class="mb-10 text-gray-600 dark:text-gray-400">
+			Have a project in mind, a question, or just want to say hello? Fill out the form below and
+			I'll get back to you as soon as I can.
+		</p>
+
+		<form
+			action={FORMSPREE_ACTION}
+			method="POST"
+			class="space-y-6"
+		>
+			<div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+				<div class="flex flex-col gap-1">
+					<label class="text-sm font-semibold" for="name">Name</label>
+					<input
+						class="rounded border border-zinc-300 bg-transparent px-3 py-2 text-sm focus:border-accent focus:outline-none dark:border-zinc-600"
+						id="name"
+						name="name"
+						type="text"
+						required
+						autocomplete="name"
+					/>
+				</div>
+
+				<div class="flex flex-col gap-1">
+					<label class="text-sm font-semibold" for="email">Email</label>
+					<input
+						class="rounded border border-zinc-300 bg-transparent px-3 py-2 text-sm focus:border-accent focus:outline-none dark:border-zinc-600"
+						id="email"
+						name="email"
+						type="email"
+						required
+						autocomplete="email"
+					/>
+				</div>
+			</div>
+
+			<div class="flex flex-col gap-1">
+				<label class="text-sm font-semibold" for="subject">Subject</label>
+				<input
+					class="rounded border border-zinc-300 bg-transparent px-3 py-2 text-sm focus:border-accent focus:outline-none dark:border-zinc-600"
+					id="subject"
+					name="subject"
+					type="text"
+				/>
+			</div>
+
+			<div class="flex flex-col gap-1">
+				<label class="text-sm font-semibold" for="message">Message</label>
+				<textarea
+					class="min-h-36 rounded border border-zinc-300 bg-transparent px-3 py-2 text-sm focus:border-accent focus:outline-none dark:border-zinc-600"
+					id="message"
+					name="message"
+					required
+					rows="6"
+				></textarea>
+			</div>
+
+			{/* Honeypot field — hidden from real users, catches bots */}
+			<input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off" />
+
+			{/* Redirect after submission — update to your actual thank-you URL or remove */}
+			<input type="hidden" name="_next" value={`${import.meta.env.BASE_URL}contact/?sent=1`} />
+
+			<button
+				type="submit"
+				class="bg-accent hover:bg-accent/90 rounded px-6 py-2 text-sm font-semibold text-white transition-colors"
+			>
+				Send message
+			</button>
+		</form>
+
+		{/* Simple success message shown when Formspree redirects back with ?sent=1 */}
+	</div>
+</PageLayout>
+
+<script>
+	if (new URLSearchParams(window.location.search).get("sent") === "1") {
+		const form = document.querySelector("form");
+		if (form) {
+			form.insertAdjacentHTML(
+				"beforebegin",
+				`<p class="mb-6 rounded border border-green-400 bg-green-50 px-4 py-3 text-sm text-green-800 dark:bg-green-900/20 dark:text-green-300">
+					Thanks for reaching out — I'll get back to you soon!
+				</p>`,
+			);
+		}
+	}
+</script>

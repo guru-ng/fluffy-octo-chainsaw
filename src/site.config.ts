@@ -43,6 +43,10 @@ export const menuLinks: { path: string; title: string }[] = [
 		path: "/fluffy-octo-chainsaw/notes/",
 		title: "Notes",
 	},
+	{
+		path: "/fluffy-octo-chainsaw/projects/",
+		title: "Projects",
+	},
 ];
 
 // https://expressive-code.com/reference/configuration/

@@ -1,15 +1,22 @@
 ---
+import type { MarkdownHeading } from "astro";
 import Masthead from "@/components/blog/Masthead.astro";
 import TOC from "@/components/blog/TOC.astro";
 import WebMentions from "@/components/blog/webmentions/index.astro";
+import Giscus from "@/components/blog/Giscus.astro";
+import FormattedDate from "@/components/FormattedDate.astro";
 
 import BaseLayout from "./Base.astro";
 
 interface Props {
 	post: any;
+	relatedPosts?: Array<{
+		id: string;
+		data: { title?: string; publishDate?: Date; tags: string[] };
+	}>;
 }
 
-const { post } = Astro.props;
+const { post, relatedPosts = [] } = Astro.props;
 const postData = post?.data ?? post ?? {};
 
 const { ogImage, title, description, updatedDate, publishDate } = postData;
@@ -17,10 +24,33 @@ const socialImage = ogImage ?? `${import.meta.env.BASE_URL}og-image/${post?.id}.
 const articleDate =
 	updatedDate?.toISOString?.() ?? publishDate?.toISOString?.() ?? new Date().toISOString();
 
-// microCMS JSON rendering is not yet implemented in this theme.
-// Keep TOC empty until content rendering exists.
-const headings: any[] = [];
-const readingTime = "";
+// Compute reading time and extract headings from microCMS HTML content.
+const contentsHtml = typeof postData.contents === "string" ? postData.contents : null;
+
+let readingTime = "";
+const headings: MarkdownHeading[] = [];
+
+if (contentsHtml) {
+	const plain = contentsHtml.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+	const wordCount = plain.split(/\s+/).filter(Boolean).length;
+	readingTime = `${Math.max(1, Math.round(wordCount / 200))} min read`;
+
+	const headingRe = /<h([2-4])[^>]*>([\s\S]*?)<\/h\1>/gi;
+	const slugCounts = new Map<string, number>();
+	let m: RegExpExecArray | null;
+	while ((m = headingRe.exec(contentsHtml)) !== null) {
+		const depth = parseInt(m[1]!);
+		const text = m[2]!.replace(/<[^>]*>/g, "").trim();
+		const base =
+			text
+				.toLowerCase()
+				.replace(/[^a-z0-9]+/g, "-")
+				.replace(/^-|-$/g, "") || "heading";
+		const cnt = slugCounts.get(base) ?? 0;
+		slugCounts.set(base, cnt + 1);
+		headings.push({ depth, slug: cnt > 0 ? `${base}-${cnt}` : base, text });
+	}
+}
 ---
 
 <BaseLayout
@@ -45,6 +75,36 @@ const readingTime = "";
 			</div>
 		</div>
 	</article>
+
+	{/* Related posts */}
+	{
+		relatedPosts.length > 0 && (
+			<aside class="mt-16 border-t border-zinc-200 pt-8 dark:border-zinc-700">
+				<h2 class="title mb-6 text-xl">Related Posts</h2>
+				<ul class="space-y-4">
+					{relatedPosts.map((p) => (
+						<li class="grid gap-2 sm:grid-cols-[auto_1fr]">
+							<FormattedDate
+								class="min-w-30 font-semibold text-gray-600 dark:text-gray-400"
+								date={p.data.publishDate}
+							/>
+							<a
+								class="cactus-link"
+								href={`${import.meta.env.BASE_URL}posts/${p.id}/`}
+							>
+								{p.data.title}
+							</a>
+						</li>
+					))}
+				</ul>
+			</aside>
+		)
+	}
+
+	{/* Comments */}
+	<div class="mt-12">
+		<Giscus />
+	</div>
 
 	<button
 		class="hover:border-link fixed end-4 bottom-8 z-90 flex h-10 w-10 translate-y-28 cursor-pointer items-center justify-center rounded-full border-2 border-transparent bg-zinc-200 text-3xl opacity-0 transition-all transition-discrete duration-300 data-[show=true]:translate-y-0 data-[show=true]:opacity-100 sm:end-8 sm:h-12 sm:w-12 dark:bg-zinc-700"
@@ -84,4 +144,24 @@ const readingTime = "";
 
 	const observer = new IntersectionObserver(callback);
 	observer.observe(targetHeader);
+
+	// Inject id attributes on headings so TOC anchor links work with microCMS HTML.
+	// Uses the same slug algorithm as the server-side extraction in BlogPost.astro.
+	const article = document.querySelector("[data-pagefind-body]");
+	if (article) {
+		const els = article.querySelectorAll("h2, h3, h4");
+		const counts = new Map<string, number>();
+		els.forEach((el) => {
+			if (el.id) return;
+			const text = el.textContent?.trim() ?? "";
+			const base =
+				text
+					.toLowerCase()
+					.replace(/[^a-z0-9]+/g, "-")
+					.replace(/^-|-$/g, "") || "heading";
+			const cnt = counts.get(base) ?? 0;
+			counts.set(base, cnt + 1);
+			el.id = cnt > 0 ? `${base}-${cnt}` : base;
+		});
+	}
 </script>

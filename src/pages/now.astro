@@ -1,0 +1,65 @@
+---
+import PageLayout from "@/layouts/Base.astro";
+
+// Update this date whenever you update the page content.
+const lastUpdated = "2026-06-10";
+
+const meta = {
+	description: "What I'm focused on right now — projects, learning, and life.",
+	title: "Now",
+};
+---
+
+<PageLayout meta={meta}>
+	<div class="mb-12">
+		<h1 class="title mb-2">Now</h1>
+		<p class="mb-10 text-sm text-gray-600 dark:text-gray-400">
+			Last updated: <time datetime={lastUpdated}>{lastUpdated}</time> · Osaka, Japan ·
+			<a
+				class="cactus-link"
+				href="https://nownownow.com/about"
+				target="_blank"
+				rel="noreferrer noopener"
+			>
+				What's a now page?
+			</a>
+		</p>
+
+		<div class="prose prose-sm prose-cactus max-w-none">
+			{/* TODO: Replace the sections below with what's actually going on in your life. */}
+
+			<section class="mb-8">
+				<h2>Building</h2>
+				<p>
+					TODO — what are you actively working on? Side projects, features at work, experiments?
+					Be specific. "I'm building a CLI tool in Rust that…" is more interesting than "working on
+					side projects."
+				</p>
+			</section>
+
+			<section class="mb-8">
+				<h2>Learning</h2>
+				<p>
+					TODO — what skill or topic are you deliberately studying right now? A new language, a
+					framework, a domain (databases, security, design)? Mention resources you're using.
+				</p>
+			</section>
+
+			<section class="mb-8">
+				<h2>Reading</h2>
+				<p>
+					TODO — books, papers, blogs, or newsletters you're currently reading. Link to them if
+					you can.
+				</p>
+			</section>
+
+			<section class="mb-8">
+				<h2>Life</h2>
+				<p>
+					TODO — what's happening outside of work? A hobby you picked up, somewhere you visited,
+					something you're looking forward to.
+				</p>
+			</section>
+		</div>
+	</div>
+</PageLayout>

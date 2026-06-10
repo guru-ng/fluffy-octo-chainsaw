@@ -1,0 +1,53 @@
+---
+/**
+ * Giscus comments — powered by GitHub Discussions.
+ *
+ * Setup (do this once):
+ * 1. Enable GitHub Discussions: repo Settings → General → Features → Discussions.
+ * 2. Install the Giscus app on your repo: https://github.com/apps/giscus
+ * 3. Go to https://giscus.app, enter your repo details, choose a category,
+ *    and copy the generated repo ID and category ID into the constants below.
+ */
+
+// TODO: Replace every "TODO_…" value with the output from https://giscus.app
+const REPO = "guru-ng/fluffy-octo-chainsaw"; // TODO: confirm this matches your GitHub repo slug
+const REPO_ID = "TODO_REPLACE_REPO_ID";
+const CATEGORY = "Announcements"; // TODO: choose a Discussion category
+const CATEGORY_ID = "TODO_REPLACE_CATEGORY_ID";
+---
+
+<section class="mt-16 border-t border-zinc-200 pt-8 dark:border-zinc-700">
+	<h2 class="title mb-6 text-xl">Comments</h2>
+	<div class="giscus"></div>
+</section>
+
+<script
+	src="https://giscus.app/client.js"
+	data-repo={REPO}
+	data-repo-id={REPO_ID}
+	data-category={CATEGORY}
+	data-category-id={CATEGORY_ID}
+	data-mapping="pathname"
+	data-strict="0"
+	data-reactions-enabled="1"
+	data-emit-metadata="0"
+	data-input-position="bottom"
+	data-theme="preferred_color_scheme"
+	data-lang="en"
+	crossorigin="anonymous"
+	is:inline
+	async
+></script>
+
+<script>
+	// Keep Giscus theme in sync with the site's dark/light toggle.
+	function syncGiscusTheme() {
+		const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+		const theme = isDark ? "dark" : "light";
+		const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
+		iframe?.contentWindow?.postMessage({ giscus: { setConfig: { theme } } }, "https://giscus.app");
+	}
+
+	const themeObserver = new MutationObserver(syncGiscusTheme);
+	themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+</script>

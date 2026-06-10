@@ -6,22 +6,37 @@ import { getMicrocmsPostById, getMicrocmsPostsCount, getMicrocmsPosts } from "@/
 export const getStaticPaths = (async () => {
 	try {
 		const pageSize = 100;
-		// Fetch enough pages to cover all posts.
 		const totalCount = await getMicrocmsPostsCount();
 		const pageCount = Math.ceil(totalCount / pageSize);
 
-		const paths: {
-			params: { slug: string };
-			props: { post: Awaited<ReturnType<typeof getMicrocmsPostById>> };
-		}[] = [];
+		// Collect all posts first so we can compute related posts per entry.
+		const allPosts: Awaited<ReturnType<typeof getMicrocmsPostById>>[] = [];
 		for (let page = 0; page < pageCount; page++) {
 			const offset = page * pageSize;
 			const items = await getMicrocmsPosts({ limit: pageSize, offset });
-			for (const it of items) {
-				paths.push({ params: { slug: it.id }, props: { post: it as any } });
-			}
+			allPosts.push(...(items as any[]));
 		}
-		return paths;
+
+		return allPosts.map((post) => {
+			const relatedPosts = allPosts
+				.filter(
+					(p) =>
+						p.id !== post.id &&
+						p.data.tags.some((t: string) => (post.data.tags as string[]).includes(t)),
+				)
+				.sort((a, b) => {
+					const aShared = a.data.tags.filter((t: string) =>
+						(post.data.tags as string[]).includes(t),
+					).length;
+					const bShared = b.data.tags.filter((t: string) =>
+						(post.data.tags as string[]).includes(t),
+					).length;
+					return bShared - aShared;
+				})
+				.slice(0, 3);
+
+			return { params: { slug: post.id }, props: { post: post as any, relatedPosts } };
+		});
 	} catch (error) {
 		console.warn("[posts/slug] Failed to fetch from microCMS, building with no post pages:", error);
 		return [];
@@ -30,12 +45,12 @@ export const getStaticPaths = (async () => {
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { post } = Astro.props;
+const { post, relatedPosts = [] } = Astro.props;
 const contents = post?.data?.contents;
 const contentsHtml = typeof contents === "string" ? contents : null;
 ---
 
-<PostLayout post={post as any}>
+<PostLayout post={post as any} relatedPosts={relatedPosts}>
 	{/* TODO: richer microCMS contents rendering + TOC generation */}
 	{
 		contentsHtml !== null ? (

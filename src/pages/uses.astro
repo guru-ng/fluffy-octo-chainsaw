@@ -1,0 +1,112 @@
+---
+import PageLayout from "@/layouts/Base.astro";
+
+const meta = {
+	description: "The hardware, software, and tools I use day-to-day as a developer.",
+	title: "Uses",
+};
+
+interface Category {
+	heading: string;
+	items: { name: string; description: string }[];
+}
+
+// TODO: Replace these placeholders with your actual setup.
+const categories: Category[] = [
+	{
+		heading: "Hardware",
+		items: [
+			{
+				name: "TODO — your computer",
+				description: "e.g. MacBook Pro M3, 16 GB RAM — or whatever you actually use.",
+			},
+			{
+				name: "TODO — monitor",
+				description: "Size, resolution, stand setup.",
+			},
+			{
+				name: "TODO — keyboard & mouse",
+				description: "Mechanical, wireless, whatever you prefer.",
+			},
+		],
+	},
+	{
+		heading: "Editor & Terminal",
+		items: [
+			{
+				name: "TODO — editor",
+				description: "VS Code, Neovim, etc. — and any theme or key extensions.",
+			},
+			{
+				name: "TODO — terminal",
+				description: "iTerm2, Warp, Windows Terminal, etc. Shell (zsh / fish / bash).",
+			},
+			{
+				name: "TODO — font",
+				description: "Coding font you use in editor and terminal.",
+			},
+		],
+	},
+	{
+		heading: "Software & Tools",
+		items: [
+			{
+				name: "TODO — browser",
+				description: "Which browser you develop and browse in, and essential extensions.",
+			},
+			{
+				name: "TODO — note-taking",
+				description: "Obsidian, Notion, plain markdown files, etc.",
+			},
+			{
+				name: "TODO — design",
+				description: "Figma, Excalidraw, or nothing at all.",
+			},
+		],
+	},
+	{
+		heading: "Development",
+		items: [
+			{
+				name: "TODO — version manager",
+				description: "nvm, fnm, mise — how you manage Node/runtime versions.",
+			},
+			{
+				name: "TODO — package manager",
+				description: "pnpm, npm, yarn, bun.",
+			},
+			{
+				name: "TODO — local AI",
+				description: "Claude Code, Copilot, Cursor, or none.",
+			},
+		],
+	},
+];
+---
+
+<PageLayout meta={meta}>
+	<div class="mb-12">
+		<h1 class="title mb-2">Uses</h1>
+		<p class="mb-10 text-sm text-gray-600 dark:text-gray-400">
+			Hardware and software I reach for every day.
+		</p>
+
+		<div class="space-y-10">
+			{
+				categories.map((cat) => (
+					<section>
+						<h2 class="mb-4 text-lg font-semibold text-accent-2">{cat.heading}</h2>
+						<ul class="space-y-4">
+							{cat.items.map((item) => (
+								<li class="grid grid-cols-1 gap-1 sm:grid-cols-[14rem_1fr]">
+									<span class="font-semibold">{item.name}</span>
+									<span class="text-gray-600 dark:text-gray-400">{item.description}</span>
+								</li>
+							))}
+						</ul>
+					</section>
+				))
+			}
+		</div>
+	</div>
+</PageLayout>
