@@ -45,7 +45,7 @@ export const getStaticPaths = (async () => {
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { post, relatedPosts = [] } = Astro.props;
+const { post, relatedPosts = [] } = Astro.props as Props;
 const contents = post?.data?.contents;
 const contentsHtml = typeof contents === "string" ? contents : null;
 ---
