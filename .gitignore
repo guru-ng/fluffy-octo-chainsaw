@@ -13,10 +13,19 @@ pnpm-debug.log*
 
 # environment variables
 .env
+.env.local
 .env.production
 
-# macOS-specific files
+# OS-specific files
 .DS_Store
+Thumbs.db
+
+# editor/IDE (workspace state — .vscode/ is tracked intentionally)
+.obsidian/
+.idea/
+
+# deploy tooling
+.netlify/
 
 # misc
 *.pem
