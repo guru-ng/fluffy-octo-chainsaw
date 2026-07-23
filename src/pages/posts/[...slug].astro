@@ -48,7 +48,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { post, relatedPosts = [] } = Astro.props as Props;
 const contents = post?.data?.contents;
 const contentsHtml = typeof contents === "string" ? contents : null;
-const pictures = post?.data?.pictures ?? [];
+const pictures: { src: string; width?: number; height?: number }[] = post?.data?.pictures ?? [];
 ---
 
 <PostLayout post={post as any} relatedPosts={relatedPosts}>

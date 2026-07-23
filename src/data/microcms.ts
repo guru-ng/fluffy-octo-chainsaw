@@ -72,7 +72,7 @@ export type MicrocmsPost = {
 		ogImage?: string | undefined;
 		draft: boolean;
 		coverImage?: { src: string; alt: string } | undefined;
-		pictures: { src: string; width?: number; height?: number }[];
+		pictures: { src: string; width?: number | undefined; height?: number | undefined }[];
 		tags: string[];
 	};
 };
