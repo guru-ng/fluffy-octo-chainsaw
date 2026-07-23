@@ -36,3 +36,8 @@ Thumbs.db
 
 # unrelated tooling
 get-shit-done/
+
+# personal notes (kept local, not published)
+obsidian-vault/
+*.canvas
+/2026-*.md

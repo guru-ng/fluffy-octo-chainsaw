@@ -72,6 +72,7 @@ export type MicrocmsPost = {
 		ogImage?: string | undefined;
 		draft: boolean;
 		coverImage?: { src: string; alt: string } | undefined;
+		pictures: { src: string; width?: number; height?: number }[];
 		tags: string[];
 	};
 };
@@ -143,6 +144,15 @@ function mapToPost(raw: MicrocmsRawItem): MicrocmsPost {
 	const coverImage =
 		coverRaw?.url != null ? { src: coverRaw.url, alt: coverRaw.alt ?? "" } : undefined;
 
+	// microCMS "multiple image" field: an array of { url, width, height } objects.
+	// The user's field is named "pictures"; accept common alternates too.
+	const picturesRaw = pick(raw, ["pictures", "images", "gallery", "photos"]);
+	const pictures = Array.isArray(picturesRaw)
+		? (picturesRaw as Array<{ url?: string; width?: number; height?: number }>)
+				.filter((p) => p && typeof p.url === "string")
+				.map((p) => ({ src: p.url as string, width: p.width, height: p.height }))
+		: [];
+
 	const tagsRaw = pick(raw, ["tags", "categories"]);
 
 	return {
@@ -158,6 +168,7 @@ function mapToPost(raw: MicrocmsRawItem): MicrocmsPost {
 			ogImage: ogImage || undefined,
 			draft: Boolean(pick(raw, ["draft"]) ?? raw.published === false),
 			coverImage,
+			pictures,
 			tags: Array.isArray(tagsRaw) ? (tagsRaw as string[]) : [],
 		},
 	};
