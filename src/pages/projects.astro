@@ -14,29 +14,20 @@ interface Project {
 	demo?: string;
 }
 
-// TODO: Replace these placeholder projects with your real work.
 const projects: Project[] = [
 	{
-		title: "Project Alpha",
+		title: "Portfolio — snjv.club",
 		description:
-			"A brief description of what this project does and the problem it solves. What was interesting or challenging about building it?",
-		tech: ["React", "TypeScript", "Tailwind CSS"],
-		github: "https://github.com/guru-ng/project-alpha",
-		demo: "https://example.com",
+			"This site. An Astro static site deployed on Cloudflare with a CI/CD pipeline: every git push builds and ships to production automatically. Custom domain, DNS, and edge hosting all on Cloudflare.",
+		tech: ["Astro", "TypeScript", "Tailwind CSS", "Cloudflare"],
+		github: "https://github.com/guru-ng/fluffy-octo-chainsaw",
+		demo: "https://snjv.club",
 	},
 	{
-		title: "Project Beta",
+		title: "Gorkhali Runners (in progress)",
 		description:
-			"Another project description. Mention the key features, your role, and any notable technical decisions you made.",
-		tech: ["Node.js", "PostgreSQL", "Docker"],
-		github: "https://github.com/guru-ng/project-beta",
-	},
-	{
-		title: "Project Gamma",
-		description:
-			"A third project. This could be a CLI tool, a library, an automation script — anything worth sharing.",
-		tech: ["Python", "FastAPI"],
-		demo: "https://example.com",
+			"A running community app where runners match each other's weekly distance. Planned: Strava API integration for automatic run syncing, leaderboards, and head-to-head distance challenges. Launching on a subdomain soon.",
+		tech: ["Supabase", "Strava API", "TypeScript"],
 	},
 ];
 ---
