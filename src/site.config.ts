@@ -22,29 +22,29 @@ export const siteConfig: SiteConfig = {
 	// Used to construct the meta title property found in src/components/BaseHead.astro L:11, and webmanifest name found in astro.config.ts L:42
 	title: "Sanjeev Gurung - Portfolio",
 	// Your GitHub Pages URL
-	url: "https://guru-ng.github.io/fluffy-octo-chainsaw/",
+	url: "https://snjv.club/",
 };
 
 // Used to generate links in both the Header & Footer.
 export const menuLinks: { path: string; title: string }[] = [
 	{
-		path: "/fluffy-octo-chainsaw/",
+		path: "/",
 		title: "Home",
 	},
 	{
-		path: "/fluffy-octo-chainsaw/about/",
+		path: "/about/",
 		title: "About",
 	},
 	{
-		path: "/fluffy-octo-chainsaw/posts/",
+		path: "/posts/",
 		title: "Blog",
 	},
 	{
-		path: "/fluffy-octo-chainsaw/notes/",
+		path: "/notes/",
 		title: "Notes",
 	},
 	{
-		path: "/fluffy-octo-chainsaw/projects/",
+		path: "/projects/",
 		title: "Projects",
 	},
 ];

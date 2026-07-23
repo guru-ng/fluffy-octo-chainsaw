@@ -103,7 +103,6 @@ export default defineConfig({
 			WEBMENTION_PINGBACK: envField.string({ context: "client", access: "public", optional: true }),
 		},
 	},
-	base: '/fluffy-octo-chainsaw/',
 });
 
 function rawFonts(ext: string[]) {
