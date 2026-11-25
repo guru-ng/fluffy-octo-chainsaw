@@ -4,24 +4,30 @@ import { menuLinks, siteConfig } from "@/site.config";
 const year = new Date().getFullYear();
 ---
 
-<footer
-	class="mt-auto flex w-full flex-col items-center justify-center gap-y-2 pt-20 pb-4 text-center align-top font-semibold text-gray-600 sm:flex-row sm:justify-between sm:text-xs dark:text-gray-400"
->
-	<div class="me-0 sm:me-4">
-		&copy; {siteConfig.author}
-		{year}.<span class="inline-block">&nbsp;🚀&nbsp;Astro Cactus</span>
-	</div>
-	<nav
-		aria-labelledby="footer_links"
-		class="flex gap-x-2 sm:gap-x-0 sm:divide-x sm:divide-gray-500"
+<footer class="border-line mt-24 border-t">
+	<div
+		class="text-mut mx-auto flex max-w-300 flex-col items-start justify-between gap-6 px-5 py-10 text-[15px] sm:flex-row sm:items-center sm:px-8"
 	>
-		<p id="footer_links" class="sr-only">More on this site</p>
-		{
-			menuLinks.map((link) => (
-				<a class="hover:text-global-text px-4 py-2 hover:underline sm:py-0" href={link.path}>
-					{link.title}
-				</a>
-			))
-		}
-	</nav>
+		<div>
+			<p class="text-global-text font-semibold tracking-[0.14em]">SANJEEV</p>
+			<p class="mt-1">&copy; {year} {siteConfig.author} · Osaka, Japan</p>
+		</div>
+		<nav aria-labelledby="footer_links" class="flex flex-wrap gap-x-5 gap-y-1">
+			<p class="sr-only" id="footer_links">More on this site</p>
+			{
+				menuLinks.map((link) => (
+					<a class="hover:text-global-text py-2 hover:underline" href={link.path}>
+						{link.title}
+					</a>
+				))
+			}
+			<a class="hover:text-global-text py-2 hover:underline" href="/contact/">Contact</a>
+			<a
+				class="hover:text-global-text py-2 hover:underline"
+				href="https://github.com/guru-ng"
+				rel="noreferrer noopener"
+				target="_blank">GitHub</a
+			>
+		</nav>
+	</div>
 </footer>

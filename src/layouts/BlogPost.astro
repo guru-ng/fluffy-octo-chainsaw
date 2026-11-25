@@ -68,7 +68,7 @@ if (contentsHtml) {
 		<div class="flex flex-col gap-10 lg:flex-row lg:items-start">
 			{!!headings.length && <TOC headings={headings} />}
 			<div
-				class="prose prose-sm prose-headings:font-semibold prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-gray-600 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none"
+				class="prose prose-sm prose-headings:font-semibold prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-mut prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none"
 			>
 				<slot />
 				<WebMentions />
@@ -79,13 +79,13 @@ if (contentsHtml) {
 	{/* Related posts */}
 	{
 		relatedPosts.length > 0 && (
-			<aside class="mt-16 border-t border-zinc-200 pt-8 dark:border-zinc-700">
+			<aside class="mt-16 border-t border-line pt-8">
 				<h2 class="title mb-6 text-xl">Related Posts</h2>
 				<ul class="space-y-4">
 					{relatedPosts.map((p) => (
 						<li class="grid gap-2 sm:grid-cols-[auto_1fr]">
 							<FormattedDate
-								class="min-w-30 font-semibold text-gray-600 dark:text-gray-400"
+								class="min-w-30 font-semibold text-mut"
 								date={p.data.publishDate}
 							/>
 							<a
@@ -107,7 +107,7 @@ if (contentsHtml) {
 	</div>
 
 	<button
-		class="hover:border-link fixed end-4 bottom-8 z-90 flex h-10 w-10 translate-y-28 cursor-pointer items-center justify-center rounded-full border-2 border-transparent bg-zinc-200 text-3xl opacity-0 transition-all transition-discrete duration-300 data-[show=true]:translate-y-0 data-[show=true]:opacity-100 sm:end-8 sm:h-12 sm:w-12 dark:bg-zinc-700"
+		class="hover:border-link fixed end-4 bottom-8 z-90 flex h-10 w-10 translate-y-28 cursor-pointer items-center justify-center rounded-full border-2 border-transparent bg-card text-3xl opacity-0 transition-all transition-discrete duration-300 data-[show=true]:translate-y-0 data-[show=true]:opacity-100 sm:end-8 sm:h-12 sm:w-12 border-edge"
 		data-show="false"
 		id="to-top-btn"
 	>
