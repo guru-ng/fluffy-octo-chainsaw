@@ -6,14 +6,30 @@
 /* use a selector-based strategy for dark mode */
 @variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* you could refactor below to use light-dark(), depending on your target audience */
+/* WCAG 2.2 AA palette. Contrast ratios (text on bg / on card):
+   LIGHT: text 17.2/15.7, muted 6.2/5.7, lime 7.5/6.8, coral 6.3/5.8, sky 6.9/6.3, violet 7.4/6.8, amber 6.5/6.0
+   DARK:  text 17.4/16.4, muted 7.4/7.0, lime 15.2/14.3, coral 8.9/8.4, sky 10.5/9.9, violet 9.0/8.5, amber 12.8/12.1
+   --color-edge (borders of buttons and form fields) is >= 3:1 in both themes (WCAG 1.4.11).
+   --color-line is decorative only (dividers). */
 @theme {
-	--color-global-bg: oklch(98.48% 0 0);
-	--color-global-text: oklch(26.99% 0.0096 235.05);
-	--color-link: oklch(55.44% 0.0431 185.69);
-	--color-accent: oklch(55.27% 0.195 19.06);
-	--color-accent-2: oklch(18.15% 0 0);
-	--color-quote: oklch(55.27% 0.195 19.06);
+	--font-sans: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+	--font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+
+	--color-global-bg: #f6f5f1;
+	--color-global-text: #121212;
+	--color-link: #00588f;
+	--color-accent: #2f5a00;
+	--color-accent-2: #121212;
+	--color-quote: #5336b8;
+	--color-mut: #5c5b57;
+	--color-line: #dcdad3;
+	--color-edge: #7d7c77;
+	--color-card: #ecebe5;
+	--color-on-accent: #f6f5f1;
+	--color-c2: #a82c19;
+	--color-c3: #00588f;
+	--color-c4: #5336b8;
+	--color-c5: #7a4f00;
 }
 
 @layer base {
@@ -27,23 +43,84 @@
 
 		&[data-theme="dark"] {
 			color-scheme: dark;
-			--color-global-bg: oklch(23.64% 0.0045 248);
-			--color-global-text: oklch(83.54% 0 264);
-			--color-link: oklch(70.44% 0.1133 349);
-			--color-accent: oklch(70.91% 0.1415 163.7);
-			--color-accent-2: oklch(94.66% 0 0);
-			--color-quote: oklch(94.8% 0.106 136.49);
+			--color-global-bg: #0b0b0c;
+			--color-global-text: #f2f1ee;
+			--color-link: #6ec6ff;
+			--color-accent: #c6f24e;
+			--color-accent-2: #f2f1ee;
+			--color-quote: #b9a1ff;
+			--color-mut: #a09f9a;
+			--color-line: #232325;
+			--color-edge: #67676c;
+			--color-card: #131315;
+			--color-on-accent: #0b0b0c;
+			--color-c2: #ff8f80;
+			--color-c3: #6ec6ff;
+			--color-c4: #b9a1ff;
+			--color-c5: #ffc85a;
 		}
+	}
+
+	:focus-visible {
+		outline: 3px solid var(--color-accent);
+		outline-offset: 3px;
+		border-radius: 6px;
+	}
+
+	body {
+		-webkit-font-smoothing: antialiased;
+		transition:
+			background-color 0.3s,
+			color 0.3s;
 	}
 }
 
 @layer components {
 	.cactus-link {
-		@apply hover:decoration-link underline underline-offset-2 hover:decoration-2;
+		@apply decoration-edge hover:decoration-accent underline underline-offset-4 hover:decoration-2;
 	}
 
 	.title {
-		@apply text-accent-2 text-2xl font-semibold;
+		@apply text-accent-2 font-serif text-4xl leading-none tracking-tight sm:text-5xl;
+	}
+
+	.display {
+		@apply text-accent-2 font-serif leading-none tracking-tight;
+	}
+
+	/* Buttons: min 44px tap target, 3:1 border (WCAG 1.4.11 / 2.5.8) */
+	.pill {
+		@apply border-edge text-global-text hover:border-accent hover:text-accent inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full border bg-transparent px-5 py-2 text-[15px] no-underline transition-colors;
+	}
+	.pill-solid {
+		@apply bg-global-text text-global-bg border-global-text hover:bg-accent hover:text-on-accent hover:border-accent;
+	}
+
+	.chip {
+		@apply text-mut inline-block rounded-full border border-current px-3 py-0.5 text-[13px];
+	}
+	.chip-acc {
+		@apply text-accent;
+	}
+	.chip-c2 {
+		@apply text-c2;
+	}
+	.chip-c3 {
+		@apply text-c3;
+	}
+	.chip-c4 {
+		@apply text-c4;
+	}
+	.chip-c5 {
+		@apply text-c5;
+	}
+
+	.panel {
+		@apply bg-card border-line rounded-2xl border;
+	}
+
+	.field {
+		@apply border-edge bg-card text-global-text focus:border-accent w-full rounded-xl border px-4 py-3 text-base focus:outline-none;
 	}
 
 	.admonition {

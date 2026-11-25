@@ -87,7 +87,7 @@ const categories: Category[] = [
 <PageLayout meta={meta}>
 	<div class="mb-12">
 		<h1 class="title mb-2">Uses</h1>
-		<p class="mb-10 text-sm text-gray-600 dark:text-gray-400">
+		<p class="mb-10 text-sm text-mut">
 			Hardware and software I reach for every day.
 		</p>
 
@@ -100,7 +100,7 @@ const categories: Category[] = [
 							{cat.items.map((item) => (
 								<li class="grid grid-cols-1 gap-1 sm:grid-cols-[14rem_1fr]">
 									<span class="font-semibold">{item.name}</span>
-									<span class="text-gray-600 dark:text-gray-400">{item.description}</span>
+									<span class="text-mut">{item.description}</span>
 								</li>
 							))}
 						</ul>

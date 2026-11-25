@@ -13,7 +13,7 @@ const FORMSPREE_ACTION = `https://formspree.io/f/${FORMSPREE_ID}`;
 <PageLayout meta={meta}>
 	<div class="mb-12">
 		<h1 class="title mb-2">Contact</h1>
-		<p class="mb-10 text-gray-600 dark:text-gray-400">
+		<p class="mb-10 text-mut">
 			Have a project in mind, a question, or just want to say hello? Fill out the form below and
 			I'll get back to you as soon as I can.
 		</p>
@@ -25,9 +25,9 @@ const FORMSPREE_ACTION = `https://formspree.io/f/${FORMSPREE_ID}`;
 		>
 			<div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
 				<div class="flex flex-col gap-1">
-					<label class="text-sm font-semibold" for="name">Name</label>
+					<label class="text-mut text-sm font-semibold" for="name">Name</label>
 					<input
-						class="rounded border border-zinc-300 bg-transparent px-3 py-2 text-sm focus:border-accent focus:outline-none dark:border-zinc-600"
+						class="field"
 						id="name"
 						name="name"
 						type="text"
@@ -37,9 +37,9 @@ const FORMSPREE_ACTION = `https://formspree.io/f/${FORMSPREE_ID}`;
 				</div>
 
 				<div class="flex flex-col gap-1">
-					<label class="text-sm font-semibold" for="email">Email</label>
+					<label class="text-mut text-sm font-semibold" for="email">Email</label>
 					<input
-						class="rounded border border-zinc-300 bg-transparent px-3 py-2 text-sm focus:border-accent focus:outline-none dark:border-zinc-600"
+						class="field"
 						id="email"
 						name="email"
 						type="email"
@@ -50,9 +50,9 @@ const FORMSPREE_ACTION = `https://formspree.io/f/${FORMSPREE_ID}`;
 			</div>
 
 			<div class="flex flex-col gap-1">
-				<label class="text-sm font-semibold" for="subject">Subject</label>
+				<label class="text-mut text-sm font-semibold" for="subject">Subject</label>
 				<input
-					class="rounded border border-zinc-300 bg-transparent px-3 py-2 text-sm focus:border-accent focus:outline-none dark:border-zinc-600"
+					class="field"
 					id="subject"
 					name="subject"
 					type="text"
@@ -60,9 +60,9 @@ const FORMSPREE_ACTION = `https://formspree.io/f/${FORMSPREE_ID}`;
 			</div>
 
 			<div class="flex flex-col gap-1">
-				<label class="text-sm font-semibold" for="message">Message</label>
+				<label class="text-mut text-sm font-semibold" for="message">Message</label>
 				<textarea
-					class="min-h-36 rounded border border-zinc-300 bg-transparent px-3 py-2 text-sm focus:border-accent focus:outline-none dark:border-zinc-600"
+					class="field min-h-36"
 					id="message"
 					name="message"
 					required
@@ -78,7 +78,7 @@ const FORMSPREE_ACTION = `https://formspree.io/f/${FORMSPREE_ID}`;
 
 			<button
 				type="submit"
-				class="bg-accent hover:bg-accent/90 rounded px-6 py-2 text-sm font-semibold text-white transition-colors"
+				class="pill pill-solid"
 			>
 				Send message
 			</button>
@@ -94,7 +94,7 @@ const FORMSPREE_ACTION = `https://formspree.io/f/${FORMSPREE_ID}`;
 		if (form) {
 			form.insertAdjacentHTML(
 				"beforebegin",
-				`<p class="mb-6 rounded border border-green-400 bg-green-50 px-4 py-3 text-sm text-green-800 dark:bg-green-900/20 dark:text-green-300">
+				`<p role="status" class="border-accent text-accent bg-card mb-6 rounded-xl border px-4 py-3 text-sm">
 					Thanks for reaching out — I'll get back to you soon!
 				</p>`,
 			);

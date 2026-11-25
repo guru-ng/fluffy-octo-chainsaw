@@ -1,4 +1,5 @@
 ---
+import { projects } from "@/data/projects";
 import PageLayout from "@/layouts/Base.astro";
 
 const meta = {
@@ -6,58 +7,37 @@ const meta = {
 	title: "Projects",
 };
 
-interface Project {
-	title: string;
-	description: string;
-	tech: string[];
-	github?: string;
-	demo?: string;
-}
-
-const projects: Project[] = [
-	{
-		title: "Portfolio — snjv.club",
-		description:
-			"This site. An Astro static site deployed on Cloudflare with a CI/CD pipeline: every git push builds and ships to production automatically. Custom domain, DNS, and edge hosting all on Cloudflare.",
-		tech: ["Astro", "TypeScript", "Tailwind CSS", "Cloudflare"],
-		github: "https://github.com/guru-ng/fluffy-octo-chainsaw",
-		demo: "https://snjv.club",
-	},
-	{
-		title: "Runners in Osaka (in progress)",
-		description:
-			"A quiet running community app where runners log runs and match each other's distance — built for health and mindfulness, not competition. Astro + React on the frontend, Supabase for auth and data. Currently piloting at run.snjv.club.",
-		tech: ["Astro", "React", "Supabase", "TypeScript"],
-		github: "https://github.com/guru-ng/run-app",
-		demo: "https://run.snjv.club",
-	},
-];
+const stripes = ["var(--color-accent)", "var(--color-c3)", "var(--color-c4)", "var(--color-c5)"];
 ---
 
 <PageLayout meta={meta}>
 	<div class="mb-12">
-		<h1 class="title mb-2">Projects</h1>
-		<p class="text-gray-600 dark:text-gray-400 mb-10">
+		<h1 class="title mb-3">Projects</h1>
+		<p class="text-mut mb-10 text-lg">
 			Things I've built, am building, or find interesting enough to share.
 		</p>
 
 		<ul class="grid grid-cols-1 gap-6 sm:grid-cols-2" role="list">
 			{
-				projects.map((project) => (
-					<li class="border-accent flex flex-col gap-3 rounded-lg border p-5">
-						<h2 class="text-base font-semibold text-accent-2">{project.title}</h2>
-						<p class="flex-1 text-sm leading-relaxed">{project.description}</p>
+				projects.map((project, i) => (
+					<li
+						class="panel flex scroll-mt-28 flex-col gap-3 border-t-4 p-6"
+						id={project.id}
+						style={`border-top-color:${stripes[i % 4]}`}
+					>
+						<h2 class="text-accent-2 text-xl font-semibold">{project.title}</h2>
+						<p class="flex-1 leading-relaxed">{project.description}</p>
 
 						<div class="flex flex-wrap gap-2">
-							{project.tech.map((tag) => (
-								<span class="bg-accent/10 rounded px-2 py-0.5 text-xs">{tag}</span>
+							{project.tags.map((t) => (
+								<span class={`chip ${t.color ? `chip-${t.color}` : ""}`}>{t.label}</span>
 							))}
 						</div>
 
-						<div class="flex gap-4 text-sm">
+						<div class="flex gap-5 text-[15px]">
 							{project.github && (
 								<a
-									class="cactus-link"
+									class="cactus-link py-2"
 									href={project.github}
 									target="_blank"
 									rel="noreferrer noopener"
@@ -67,7 +47,7 @@ const projects: Project[] = [
 							)}
 							{project.demo && (
 								<a
-									class="cactus-link"
+									class="cactus-link py-2"
 									href={project.demo}
 									target="_blank"
 									rel="noreferrer noopener"
