@@ -1,4 +1,3 @@
-/* would like to ignore ./src/pages/og-image/[slug].png.ts */
 @import "tailwindcss";
 /* config for tailwindcss-typography plugin */
 @config "../../tailwind.config.ts";

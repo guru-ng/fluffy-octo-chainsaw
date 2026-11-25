@@ -20,7 +20,7 @@ const { post, relatedPosts = [] } = Astro.props;
 const postData = post?.data ?? post ?? {};
 
 const { ogImage, title, description, updatedDate, publishDate } = postData;
-const socialImage = ogImage ?? `${import.meta.env.BASE_URL}og-image/${post?.id}.png`;
+const socialImage = ogImage;
 const articleDate =
 	updatedDate?.toISOString?.() ?? publishDate?.toISOString?.() ?? new Date().toISOString();
 

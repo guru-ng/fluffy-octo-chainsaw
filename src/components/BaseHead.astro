@@ -80,10 +80,6 @@ const socialImageURL = new URL(ogImage ? ogImage : asset("/social-card.png"), As
 {/* Sitemap */}
 <link href={asset("/sitemap-index.xml")} rel="sitemap" />
 
-{/* RSS auto-discovery */}
-<link href={asset("/rss.xml")} title="Blog" rel="alternate" type="application/rss+xml" />
-<link href={asset("/notes/rss.xml")} title="Notes" rel="alternate" type="application/rss+xml" />
-
 {/* Webmentions */}
 {
 	WEBMENTION_URL && (
