@@ -1,10 +1,9 @@
 ---
 import { Image } from "astro:assets";
-import type { CollectionEntry } from "astro:content";
 import FormattedDate from "@/components/FormattedDate.astro";
 
 interface Props {
-	content: CollectionEntry<"post">;
+	content: { data?: Record<string, any> } & Record<string, any>;
 	readingTime: string;
 }
 
@@ -68,12 +67,11 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 				<path d="M17.573 18.407l2.834 -2.834a2.025 2.025 0 0 0 0 -2.864l-7.117 -7.116" />
 				<path d="M6 9h-.01" />
 			</svg>
-			{data.tags.map((tag, i) => (
+			{data.tags.map((tag: string, i: number) => (
 				<>
 					{/* prettier-ignore */}
 					<span class="contents">
-						<a class="cactus-link inline-block before:content-['#']" data-pagefind-filter={`tag:${tag}`} href={`${import.meta.env.BASE_URL}tags/${encodeURIComponent(tag)}/`}><span class="sr-only">View more blogs with the tag&nbsp;</span>{tag}
-						</a>{i < data.tags.length - 1 && ", "}
+						<span class="before:content-['#']">{tag}</span>{i < data.tags.length - 1 && ", "}
 					</span>
 				</>
 			))}
