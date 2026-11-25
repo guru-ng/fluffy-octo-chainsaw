@@ -1,5 +1,6 @@
 ---
 import PostPreview from "@/components/blog/PostPreview.astro";
+import ProjectMark from "@/components/ProjectMark.astro";
 import { getMicrocmsPosts } from "@/data/microcms";
 import { projects } from "@/data/projects";
 import PageLayout from "@/layouts/Base.astro";
@@ -107,10 +108,26 @@ const values = [
 							<li class="hm-card hm-rv" style={`--ca:var(--hm-ca-${i % 4})`}>
 								<a class="hm-card-link" href={`/projects/#${p.id}`}>
 									<div class={`hm-thumb hm-t${(i % 4) + 1}`}>
-										<span>{p.short}</span>
+										{p.mark ? <ProjectMark mark={p.mark} /> : <span>{p.short}</span>}
+										{p.thumb && (
+											<img
+												alt={p.thumb.alt}
+												class="hm-shot"
+												decoding="async"
+												height="630"
+												loading="lazy"
+												onerror="this.remove()"
+												src={p.thumb.src.startsWith("http") ? p.thumb.src : `${import.meta.env.BASE_URL}${p.thumb.src.replace(/^\//, "")}`}
+												width="1200"
+											/>
+										)}
+										<span class={`hm-badge ${p.live ? "hm-badge-live" : ""}`}>
+											{p.live ? "Live" : p.status ?? "Soon"}
+										</span>
 									</div>
 									<div class="hm-cb">
 										<h3>{p.title}</h3>
+										{p.host && <p class="hm-host">{p.host}</p>}
 										<p>{p.summary}</p>
 										<div class="hm-chips">
 											{p.tags.map((t) => (
@@ -523,7 +540,7 @@ const values = [
 		height: 100%;
 	}
 	.hm-thumb {
-		aspect-ratio: 16 / 10;
+		aspect-ratio: 1200 / 630; /* same ratio as the live sites' preview images, so nothing is cropped */
 		display: grid;
 		place-items: center;
 		font-family: var(--font-serif);
@@ -534,9 +551,54 @@ const values = [
 		text-align: center;
 		padding: 0 1rem;
 	}
-	.hm-thumb span {
+	.hm-thumb > span:not(.hm-badge) {
 		display: block;
 		will-change: translate;
+	}
+	.hm-shot {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+	.hm-mark {
+		width: 46%;
+		max-width: 11rem;
+		height: auto;
+	}
+	.hm-badge {
+		position: absolute;
+		top: 0.75rem;
+		right: 0.75rem;
+		z-index: 2;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 3px 10px;
+		border-radius: 999px;
+		background: rgba(11, 11, 12, 0.82);
+		color: #f2f1ee; /* >= 15:1 on the badge background */
+		font-family: var(--font-sans);
+		font-size: 12px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		backdrop-filter: blur(6px);
+	}
+	.hm-badge-live::before {
+		content: "";
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: #c6f24e;
+	}
+	.hm-host {
+		font-size: 14px;
+		color: var(--color-link);
+		margin-top: 2px;
+		overflow-wrap: anywhere;
 	}
 	.hm-thumb::after {
 		content: "";
@@ -716,9 +778,6 @@ const values = [
 		}
 		.hm-row > .hm-card {
 			flex-basis: 80vw;
-		}
-		.hm-thumb {
-			aspect-ratio: 16 / 9;
 		}
 		.hm-big {
 			padding: 5.5rem 0;

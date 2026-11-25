@@ -11,6 +11,13 @@ export interface Project {
 	status?: string;
 	github?: string;
 	demo?: string;
+	/** Real preview image of the live project (shown on the home card) */
+	thumb?: { src: string; alt: string };
+	/** Designed mark, used when the project has no logo or preview image */
+	mark?: "route" | "coin";
+	/** Short host shown on the card, for projects that are live */
+	host?: string;
+	live?: boolean;
 }
 
 export const projects: Project[] = [
@@ -29,6 +36,9 @@ export const projects: Project[] = [
 		],
 		github: "https://github.com/guru-ng/fluffy-octo-chainsaw",
 		demo: "https://snjv.club",
+		thumb: { src: "/social-card.png", alt: "snjv.club link preview: Sanjeev Gurung, frontend developer" },
+		host: "snjv.club",
+		live: true,
 	},
 	{
 		id: "runners-in-osaka",
@@ -46,6 +56,9 @@ export const projects: Project[] = [
 		status: "In progress",
 		github: "https://github.com/guru-ng/run-app",
 		demo: "https://run.snjv.club",
+		mark: "route",
+		host: "run.snjv.club",
+		live: true,
 	},
 	{
 		id: "kotobaquest",
@@ -60,6 +73,12 @@ export const projects: Project[] = [
 		],
 		github: "https://github.com/guru-ng/kotobaQuest",
 		demo: "https://kotobaquestapp.snjv.club",
+		thumb: {
+			src: "https://kotobaquestapp.snjv.club/og-image.png",
+			alt: "KotobaQuest: learn Japanese by playing one puzzle a day",
+		},
+		host: "kotobaquestapp.snjv.club",
+		live: true,
 	},
 	{
 		id: "money-tracker",
@@ -74,5 +93,6 @@ export const projects: Project[] = [
 			{ label: "In progress", color: "acc" },
 		],
 		status: "In progress",
+		mark: "coin",
 	},
 ];

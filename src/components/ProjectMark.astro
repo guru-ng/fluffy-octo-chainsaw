@@ -1,0 +1,45 @@
+---
+interface Props {
+	mark: "route" | "coin";
+}
+const { mark } = Astro.props;
+---
+
+{
+	mark === "route" && (
+		<svg aria-hidden="true" class="hm-mark" fill="none" focusable="false" viewBox="0 0 160 120">
+			<path
+				d="M12 96C40 96 44 58 70 58s28 34 52 34c14 0 22-12 26-26"
+				stroke="#c6f24e"
+				stroke-linecap="round"
+				stroke-width="7"
+			/>
+			<path
+				d="M12 96C40 96 44 58 70 58s28 34 52 34c14 0 22-12 26-26"
+				opacity=".25"
+				stroke="#f2f1ee"
+				stroke-dasharray="2 12"
+				stroke-linecap="round"
+				stroke-width="3"
+				transform="translate(0 14)"
+			/>
+			<circle cx="12" cy="96" fill="#f2f1ee" r="7" />
+			<circle cx="148" cy="66" fill="#c6f24e" r="9" />
+		</svg>
+	)
+}
+{
+	mark === "coin" && (
+		<svg aria-hidden="true" class="hm-mark" fill="none" focusable="false" viewBox="0 0 160 120">
+			<circle cx="80" cy="60" r="44" stroke="#ffc85a" stroke-width="7" />
+			<circle cx="80" cy="60" r="32" opacity=".35" stroke="#f2f1ee" stroke-width="2" />
+			<path
+				d="M64 38l16 22 16-22M80 60v26M66 62h28M66 74h28"
+				stroke="#ffc85a"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				stroke-width="7"
+			/>
+		</svg>
+	)
+}
