@@ -1,0 +1,68 @@
+---
+// Cycles the page through the original look and three Apple-style drafts.
+---
+
+<skin-toggle>
+	<button
+		class="hover:text-accent border-edge text-global-text relative ms-1 inline-flex h-11 min-w-11 cursor-pointer items-center justify-center gap-2 rounded-full border px-3 text-sm"
+		type="button"
+	>
+		<svg
+			aria-hidden="true"
+			fill="none"
+			focusable="false"
+			height="20"
+			stroke="currentColor"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			stroke-width="1.5"
+			viewBox="0 0 24 24"
+			width="20"
+		>
+			<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"></path>
+			<path d="M19 15l.7 1.8L21.5 17.5l-1.8.7L19 20l-.7-1.8-1.8-.7 1.8-.7L19 15z"></path>
+		</svg>
+		<span class="hidden lg:inline" data-skin-label>Original</span>
+		<span aria-live="polite" class="sr-only" data-skin-status></span>
+	</button>
+</skin-toggle>
+
+<script>
+	const SKINS = [
+		{ id: "", name: "Original" },
+		{ id: "apple-a", name: "Apple 1: Product" },
+		{ id: "apple-b", name: "Apple 2: Glass" },
+		{ id: "apple-c", name: "Apple 3: iOS" },
+	];
+
+	class SkinToggle extends HTMLElement {
+		connectedCallback() {
+			const button = this.querySelector<HTMLButtonElement>("button");
+			const label = this.querySelector<HTMLElement>("[data-skin-label]");
+			const status = this.querySelector<HTMLElement>("[data-skin-status]");
+			if (!button) return;
+
+			const current = () => {
+				const id = document.documentElement.getAttribute("data-skin") ?? "";
+				return Math.max(0, SKINS.findIndex((s) => s.id === id));
+			};
+			const render = (announce: boolean) => {
+				const i = current();
+				const next = SKINS[(i + 1) % SKINS.length]!;
+				if (label) label.textContent = SKINS[i]!.name;
+				button.setAttribute("aria-label", `Design style: ${SKINS[i]!.name}. Switch to ${next.name}`);
+				button.title = `Switch to ${next.name}`;
+				if (announce && status) status.textContent = `Style changed to ${SKINS[i]!.name}`;
+			};
+
+			button.addEventListener("click", () => {
+				const next = SKINS[(current() + 1) % SKINS.length]!;
+				document.dispatchEvent(new CustomEvent("skin-change", { detail: { skin: next.id } }));
+				render(true);
+			});
+			render(false);
+		}
+	}
+
+	customElements.define("skin-toggle", SkinToggle);
+</script>

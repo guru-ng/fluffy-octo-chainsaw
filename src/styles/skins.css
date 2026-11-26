@@ -1,0 +1,540 @@
+/*
+ * Alternative looks, switched with the Style button in the header (<html data-skin="...">).
+ *   apple-a  Product page   (apple.com style: big type, white/grey bands, pill buttons)
+ *   apple-b  Liquid Glass   (floating translucent controls over soft colour, standard materials for content)
+ *   apple-c  iOS app        (grouped cards, rounded titles, bottom tab bar on phones)
+ *
+ * Follows Apple's HIG where it applies to the web: system font (SF Pro on Apple devices), light and dark
+ * variants for every colour, 44px tap targets, glass only for navigation and controls, and fallbacks for
+ * reduced transparency. Every text colour is checked to >= 4.5:1 and control borders to >= 3:1.
+ * Apple's own system blue (#007AFF) is only 4.0:1 on white, so text and fills use deeper blues.
+ */
+
+/* ---------- shared ---------- */
+html[data-skin] {
+	--font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", system-ui,
+		"Hiragino Sans", "Noto Sans", sans-serif;
+	--font-serif: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", system-ui, "Hiragino Sans",
+		"Noto Sans", sans-serif;
+	--sk-radius: 28px;
+}
+html[data-skin] body {
+	letter-spacing: -0.011em;
+	line-height: 1.47;
+}
+html[data-skin] .hm-h1 {
+	font-weight: 600;
+	letter-spacing: -0.045em;
+	line-height: 0.95;
+}
+html[data-skin] .hm-h2,
+html[data-skin] .title,
+html[data-skin] .hm-big .hm-h2 {
+	font-weight: 600;
+	letter-spacing: -0.03em;
+}
+html[data-skin] .hm-cap h3,
+html[data-skin] .hm-val h3 {
+	font-weight: 600;
+	letter-spacing: -0.02em;
+}
+html[data-skin] .hm-thumb {
+	font-weight: 600;
+	letter-spacing: -0.02em;
+}
+html[data-skin] .pill {
+	border-radius: 980px;
+	transition:
+		background-color 0.2s,
+		color 0.2s,
+		border-color 0.2s,
+		transform 0.15s;
+}
+html[data-skin] .pill:active {
+	transform: scale(0.97);
+}
+html[data-skin] .pill-solid {
+	background: var(--sk-fill);
+	color: var(--sk-on-fill);
+	border-color: var(--sk-fill);
+}
+html[data-skin] .pill-solid:hover {
+	background: var(--sk-fill);
+	color: var(--sk-on-fill);
+	border-color: var(--sk-fill);
+	filter: brightness(0.92);
+}
+html[data-skin] .hm-card {
+	border-top-width: 1px;
+	border-top-color: var(--color-line);
+}
+html[data-skin] .hm-card:hover,
+html[data-skin] .hm-card:focus-within {
+	border-top-color: var(--color-mut);
+}
+html[data-skin] .hm-cap {
+	border-top-width: 2px;
+}
+
+/* ================= A: product page ================= */
+html[data-skin="apple-a"] {
+	--color-global-bg: #ffffff;
+	--color-global-text: #1d1d1f;
+	--color-accent-2: #1d1d1f;
+	--color-link: #0066cc;
+	--color-accent: #0066cc;
+	--color-quote: #8944ab;
+	--color-mut: #6e6e73;
+	--color-line: #d2d2d7;
+	--color-edge: #86868b;
+	--color-card: #f5f5f7;
+	--color-on-accent: #ffffff;
+	--color-c2: #d70015;
+	--color-c3: #0066cc;
+	--color-c4: #8944ab;
+	--color-c5: #b25000;
+	--sk-fill: #0066cc;
+	--sk-on-fill: #ffffff;
+}
+html[data-skin="apple-a"][data-theme="dark"] {
+	--color-global-bg: #000000;
+	--color-global-text: #f5f5f7;
+	--color-accent-2: #f5f5f7;
+	--color-link: #2997ff;
+	--color-accent: #2997ff;
+	--color-quote: #bf5af2;
+	--color-mut: #a1a1a6;
+	--color-line: #424245;
+	--color-edge: #86868b;
+	--color-card: #1d1d1f;
+	--color-on-accent: #000000;
+	--color-c2: #ff6961;
+	--color-c3: #2997ff;
+	--color-c4: #bf5af2;
+	--color-c5: #ff9f0a;
+	--sk-fill: #0071e3;
+	--sk-on-fill: #ffffff;
+}
+html[data-skin="apple-a"] #main-header {
+	background: rgba(255, 255, 255, 0.8);
+	-webkit-backdrop-filter: saturate(180%) blur(20px);
+	backdrop-filter: saturate(180%) blur(20px);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+html[data-skin="apple-a"][data-theme="dark"] #main-header {
+	background: rgba(29, 29, 31, 0.72);
+	border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+html[data-skin="apple-a"] .pill:not(.pill-solid) {
+	border-color: var(--color-accent);
+	color: var(--color-accent);
+}
+html[data-skin="apple-a"] .pill:not(.pill-solid):hover {
+	background: var(--color-accent);
+	color: var(--color-on-accent);
+}
+html[data-skin="apple-a"] .hm-hero {
+	text-align: center;
+}
+html[data-skin="apple-a"] .hm-hero-grid {
+	grid-template-columns: 1fr;
+	justify-items: center;
+	gap: 3rem;
+}
+html[data-skin="apple-a"] .hm-eyebrow,
+html[data-skin="apple-a"] .hm-cta {
+	justify-content: center;
+}
+html[data-skin="apple-a"] .hm-h1 {
+	font-size: clamp(4.5rem, 14vw, 10rem);
+}
+html[data-skin="apple-a"] .hm-tag {
+	margin-inline: auto;
+	max-width: 36ch;
+}
+html[data-skin="apple-a"] .hm-portrait {
+	justify-self: center;
+	aspect-ratio: 1;
+	max-width: 22rem;
+	border: 0;
+	border-radius: 32px;
+}
+html[data-skin="apple-a"] .hm-sec,
+html[data-skin="apple-a"] .hm-hz {
+	border-top: 0;
+}
+html[data-skin="apple-a"] .hm > section.hm-sec:nth-of-type(even) {
+	background: var(--color-card);
+}
+html[data-skin="apple-a"] .hm-card {
+	border: 0;
+	border-radius: var(--sk-radius);
+}
+html[data-skin="apple-a"] .hm-hz .hm-card {
+	background: var(--color-card);
+}
+html[data-skin="apple-a"] .hm-sec:nth-of-type(even) .hm-cap {
+	background: transparent;
+}
+html[data-skin="apple-a"] .panel {
+	border: 0;
+	border-radius: 24px;
+}
+html[data-skin="apple-a"] footer {
+	background: var(--color-card);
+	border-top: 1px solid var(--color-line);
+	margin-top: 0;
+}
+
+/* ================= B: liquid glass ================= */
+html[data-skin="apple-b"] {
+	--color-global-bg: #eef1f8;
+	--color-global-text: #1c1c1e;
+	--color-accent-2: #1c1c1e;
+	--color-link: #0a52c0;
+	--color-accent: #0a52c0;
+	--color-quote: #7a3aa0;
+	--color-mut: #505055;
+	--color-line: rgba(60, 60, 67, 0.2);
+	--color-edge: #6e6e73;
+	--color-card: rgba(255, 255, 255, 0.82); /* standard material for content */
+	--color-on-accent: #ffffff;
+	--color-c2: #c4001a;
+	--color-c3: #0a52c0;
+	--color-c4: #7a3aa0;
+	--color-c5: #8f4200;
+	--sk-fill: #0a52c0;
+	--sk-on-fill: #ffffff;
+	--sk-glass: rgba(255, 255, 255, 0.72); /* Liquid Glass: navigation and controls only */
+	--sk-glass-border: rgba(255, 255, 255, 0.7);
+	--sk-glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.14);
+	--sk-blob-1: rgba(122, 167, 255, 0.38);
+	--sk-blob-2: rgba(197, 139, 255, 0.32);
+	--sk-blob-3: rgba(255, 155, 184, 0.3);
+}
+html[data-skin="apple-b"][data-theme="dark"] {
+	--color-global-bg: #08080f;
+	--color-global-text: #f5f5f7;
+	--color-accent-2: #f5f5f7;
+	--color-link: #4da3ff;
+	--color-accent: #4da3ff;
+	--color-quote: #c88aff;
+	--color-mut: #b0b0b6;
+	--color-line: rgba(255, 255, 255, 0.16);
+	--color-edge: #8e8e93;
+	--color-card: rgba(28, 28, 30, 0.75);
+	--color-on-accent: #000000;
+	--color-c2: #ff7a72;
+	--color-c3: #4da3ff;
+	--color-c4: #c88aff;
+	--color-c5: #ffb340;
+	--sk-fill: #0a62d0;
+	--sk-on-fill: #ffffff;
+	--sk-glass: rgba(28, 28, 30, 0.62);
+	--sk-glass-border: rgba(255, 255, 255, 0.16);
+	--sk-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+	--sk-blob-1: rgba(29, 59, 122, 0.8);
+	--sk-blob-2: rgba(74, 42, 122, 0.7);
+	--sk-blob-3: rgba(122, 42, 77, 0.6);
+}
+html[data-skin="apple-b"] body {
+	background:
+		radial-gradient(60% 50% at 12% 8%, var(--sk-blob-1), transparent 62%),
+		radial-gradient(50% 45% at 88% 18%, var(--sk-blob-2), transparent 62%),
+		radial-gradient(55% 50% at 70% 92%, var(--sk-blob-3), transparent 62%), var(--color-global-bg);
+	background-attachment: fixed;
+}
+html[data-skin="apple-b"] #main-header {
+	top: 12px;
+	left: 12px;
+	right: 12px;
+	margin-inline: auto;
+	max-width: 68rem;
+	border: 1px solid var(--sk-glass-border);
+	border-radius: 999px;
+	background: var(--sk-glass);
+	-webkit-backdrop-filter: blur(24px) saturate(180%);
+	backdrop-filter: blur(24px) saturate(180%);
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.55),
+		var(--sk-glass-shadow);
+}
+html[data-skin="apple-b"] #main-header > div {
+	height: 3.5rem;
+	padding-inline: 1rem;
+}
+html[data-skin="apple-b"] #navigation-menu {
+	border-radius: 28px;
+	border: 1px solid var(--sk-glass-border);
+	background: var(--sk-glass);
+	-webkit-backdrop-filter: blur(24px) saturate(180%);
+	backdrop-filter: blur(24px) saturate(180%);
+	box-shadow: var(--sk-glass-shadow);
+	top: calc(100% + 8px);
+}
+@media (min-width: 768px) {
+	html[data-skin="apple-b"] #navigation-menu {
+		border: 0;
+		background: transparent;
+		box-shadow: none;
+		-webkit-backdrop-filter: none;
+		backdrop-filter: none;
+		top: auto;
+	}
+}
+html[data-skin="apple-b"] .pill:not(.pill-solid) {
+	background: var(--sk-glass);
+	-webkit-backdrop-filter: blur(16px) saturate(180%);
+	backdrop-filter: blur(16px) saturate(180%);
+	border-color: var(--color-edge);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+html[data-skin="apple-b"] .pill:not(.pill-solid):hover {
+	color: var(--color-accent);
+	border-color: var(--color-accent);
+}
+html[data-skin="apple-b"] .hm-h1 {
+	font-size: clamp(4rem, 10.5vw, 9rem);
+}
+html[data-skin="apple-b"] .pill-solid {
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.35),
+		0 6px 18px rgba(10, 82, 192, 0.3);
+}
+html[data-skin="apple-b"] .hm-portrait {
+	border-radius: 40px;
+	border: 1px solid var(--sk-glass-border);
+	box-shadow: var(--sk-glass-shadow);
+}
+html[data-skin="apple-b"] .hm-sec,
+html[data-skin="apple-b"] .hm-hz {
+	border-top: 0;
+}
+html[data-skin="apple-b"] .hm-card,
+html[data-skin="apple-b"] .panel,
+html[data-skin="apple-b"] .hm-cap,
+html[data-skin="apple-b"] .hm-val {
+	background: var(--color-card);
+	-webkit-backdrop-filter: blur(30px) saturate(160%);
+	backdrop-filter: blur(30px) saturate(160%);
+	border: 1px solid var(--sk-glass-border);
+	border-radius: 32px;
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.4),
+		var(--sk-glass-shadow);
+}
+html[data-skin="apple-b"] .hm-cap,
+html[data-skin="apple-b"] .hm-val {
+	padding: 1.6rem;
+}
+html[data-skin="apple-b"] .hm-about {
+	background: var(--color-card);
+	-webkit-backdrop-filter: blur(30px) saturate(160%);
+	backdrop-filter: blur(30px) saturate(160%);
+	border: 1px solid var(--sk-glass-border);
+	border-radius: 36px;
+	padding: 2.2rem;
+	box-shadow: var(--sk-glass-shadow);
+}
+html[data-skin="apple-b"] .hm-badge {
+	background: var(--sk-glass);
+	color: var(--color-global-text);
+	border: 1px solid var(--sk-glass-border);
+}
+html[data-skin="apple-b"] footer {
+	border-top-color: var(--color-line);
+}
+/* fall back to solid surfaces when blur or transparency is unavailable or unwanted */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+	html[data-skin="apple-b"] {
+		--sk-glass: rgba(255, 255, 255, 0.96);
+		--color-card: rgba(255, 255, 255, 0.96);
+	}
+	html[data-skin="apple-b"][data-theme="dark"] {
+		--sk-glass: rgba(28, 28, 30, 0.96);
+		--color-card: rgba(28, 28, 30, 0.96);
+	}
+}
+@media (prefers-reduced-transparency: reduce) {
+	html[data-skin="apple-b"] {
+		--sk-glass: #ffffff;
+		--color-card: #ffffff;
+	}
+	html[data-skin="apple-b"][data-theme="dark"] {
+		--sk-glass: #1c1c1e;
+		--color-card: #1c1c1e;
+	}
+	html[data-skin="apple-b"] * {
+		-webkit-backdrop-filter: none !important;
+		backdrop-filter: none !important;
+	}
+}
+
+/* ================= C: iOS app ================= */
+html[data-skin="apple-c"] {
+	--font-serif: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui,
+		"Hiragino Maru Gothic ProN", sans-serif;
+	--color-global-bg: #f2f2f7;
+	--color-global-text: #000000;
+	--color-accent-2: #000000;
+	--color-link: #0a58c8;
+	--color-accent: #0a58c8;
+	--color-quote: #8944ab;
+	--color-mut: #636366;
+	--color-line: #c6c6c8;
+	--color-edge: #8a8a8e;
+	--color-card: #ffffff;
+	--color-on-accent: #ffffff;
+	--color-c2: #d70015;
+	--color-c3: #0a58c8;
+	--color-c4: #8944ab;
+	--color-c5: #a54a00;
+	--sk-fill: #0a58c8;
+	--sk-on-fill: #ffffff;
+	--sk-radius: 22px;
+}
+html[data-skin="apple-c"][data-theme="dark"] {
+	--color-global-bg: #000000;
+	--color-global-text: #ffffff;
+	--color-accent-2: #ffffff;
+	--color-link: #0a84ff;
+	--color-accent: #0a84ff;
+	--color-quote: #bf5af2;
+	--color-mut: #98989d;
+	--color-line: #38383a;
+	--color-edge: #7c7c80;
+	--color-card: #1c1c1e;
+	--color-on-accent: #ffffff;
+	--color-c2: #ff6961;
+	--color-c3: #0a84ff;
+	--color-c4: #bf5af2;
+	--color-c5: #ff9f0a;
+	--sk-fill: #0a62d0;
+	--sk-on-fill: #ffffff;
+}
+html[data-skin="apple-c"] .hm-h1,
+html[data-skin="apple-c"] .hm-h2,
+html[data-skin="apple-c"] .title {
+	font-weight: 700;
+	letter-spacing: -0.035em;
+}
+html[data-skin="apple-c"] #main-header {
+	background: color-mix(in srgb, var(--color-global-bg) 78%, transparent);
+	-webkit-backdrop-filter: saturate(180%) blur(20px);
+	backdrop-filter: saturate(180%) blur(20px);
+	border-bottom: 1px solid var(--color-line);
+}
+html[data-skin="apple-c"] .pill {
+	border-radius: 14px;
+	background: var(--color-card);
+	border-color: var(--color-edge);
+}
+html[data-skin="apple-c"] .pill-solid {
+	background: var(--sk-fill);
+}
+html[data-skin="apple-c"] .hm-hero-grid {
+	grid-template-columns: 1.3fr auto;
+	gap: 2.5rem;
+}
+html[data-skin="apple-c"] .hm-portrait {
+	aspect-ratio: 1;
+	max-width: 15rem;
+	border-radius: 50%;
+	border: 0;
+	box-shadow: 0 0 0 4px var(--color-card);
+}
+html[data-skin="apple-c"] .hm-sec,
+html[data-skin="apple-c"] .hm-hz {
+	border-top: 0;
+}
+html[data-skin="apple-c"] .hm-card,
+html[data-skin="apple-c"] .panel,
+html[data-skin="apple-c"] .hm-cap,
+html[data-skin="apple-c"] .hm-val,
+html[data-skin="apple-c"] .hm-about {
+	background: var(--color-card);
+	border: 0;
+	border-radius: var(--sk-radius);
+}
+html[data-skin="apple-c"] .hm-cap,
+html[data-skin="apple-c"] .hm-val,
+html[data-skin="apple-c"] .hm-about {
+	padding: 1.5rem;
+}
+html[data-skin="apple-c"] .hm-cap {
+	border-top: 0;
+}
+html[data-skin="apple-c"] .hm-lbl {
+	text-transform: uppercase;
+	font-size: 13px;
+	letter-spacing: 0.04em;
+}
+html[data-skin="apple-c"] .hm-post {
+	background: var(--color-card);
+	border: 0;
+	border-radius: var(--sk-radius);
+	padding: 1rem 1.25rem;
+}
+html[data-skin="apple-c"] footer {
+	border-top: 0;
+}
+@media (max-width: 1023px) {
+	html[data-skin="apple-c"] .hm-hero-grid {
+		grid-template-columns: 1fr auto;
+	}
+}
+@media (max-width: 767px) {
+	html[data-skin="apple-c"] .hm-hero-grid {
+		grid-template-columns: 1fr;
+	}
+	html[data-skin="apple-c"] .hm-portrait {
+		max-width: 9rem;
+		order: -1;
+	}
+	/* phones: the menu becomes a floating tab bar, like iOS */
+	html[data-skin="apple-c"] body {
+		padding-bottom: 6rem;
+	}
+	html[data-skin="apple-c"] mobile-button {
+		display: none;
+	}
+	/* backdrop-filter would make the header the containing block of the fixed tab bar */
+	html[data-skin="apple-c"] #main-header {
+		-webkit-backdrop-filter: none;
+		backdrop-filter: none;
+		background: var(--color-global-bg);
+	}
+	html[data-skin="apple-c"] #navigation-menu {
+		position: fixed;
+		inset: auto 12px 12px 12px;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		gap: 4px;
+		padding: 6px;
+		border: 1px solid var(--color-line);
+		border-radius: 26px;
+		background: color-mix(in srgb, var(--color-card) 86%, transparent);
+		-webkit-backdrop-filter: saturate(180%) blur(20px);
+		backdrop-filter: saturate(180%) blur(20px);
+		box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+		z-index: 50;
+	}
+	html[data-skin="apple-c"] #navigation-menu > a {
+		flex: 1;
+		text-align: center;
+		min-height: 44px;
+		padding: 12px 4px;
+		font-size: 12px;
+		font-weight: 600;
+		border-radius: 20px;
+		text-decoration: none !important;
+	}
+	html[data-skin="apple-c"] #navigation-menu > a[aria-current="page"] {
+		background: color-mix(in srgb, var(--color-accent) 12%, var(--color-card));
+		color: var(--color-accent);
+	}
+	html[data-skin="apple-c"] #navigation-menu > .pill {
+		display: none;
+	}
+}

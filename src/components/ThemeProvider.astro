@@ -28,11 +28,36 @@
 		}
 	}
 
+	// design style ("" = original, or apple-a / apple-b / apple-c), set from src/components/SkinToggle.astro
+	function getSkin() {
+		try {
+			return localStorage.getItem("skin") || "";
+		} catch (e) {
+			return "";
+		}
+	}
+
+	function setSkin(skin) {
+		const root = document.documentElement;
+		if (skin) root.setAttribute("data-skin", skin);
+		else root.removeAttribute("data-skin");
+		try {
+			if (skin) localStorage.setItem("skin", skin);
+			else localStorage.removeItem("skin");
+		} catch (e) {}
+	}
+
 	// initial setup
+	setSkin(getSkin());
 	setTheme(getUserPref());
 
 	// View Transitions hook to restore theme
-	document.addEventListener("astro:after-swap", () => setTheme(getUserPref()));
+	document.addEventListener("astro:after-swap", () => {
+		setTheme(getUserPref());
+		setSkin(getSkin());
+	});
+
+	document.addEventListener("skin-change", (e) => setSkin(e.detail.skin));
 
 	// listen for theme-change custom event, fired in src/components/ThemeToggle.astro
 	document.addEventListener("theme-change", (e) => {
