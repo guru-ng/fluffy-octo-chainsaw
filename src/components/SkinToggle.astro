@@ -1,5 +1,5 @@
 ---
-// Cycles the page through the original look and three Apple-style drafts.
+// Switches the page between the original look and the Apple-style Liquid Glass look.
 ---
 
 <skin-toggle>
@@ -30,9 +30,7 @@
 <script>
 	const SKINS = [
 		{ id: "", name: "Original" },
-		{ id: "apple-a", name: "Apple 1: Product" },
-		{ id: "apple-b", name: "Apple 2: Glass" },
-		{ id: "apple-c", name: "Apple 3: iOS" },
+		{ id: "glass", name: "Glass" },
 	];
 
 	class SkinToggle extends HTMLElement {
